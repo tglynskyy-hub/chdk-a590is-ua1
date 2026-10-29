@@ -1,0 +1,28 @@
+name: A590 101b baseline
+on:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  baseline:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build container
+        run: |
+          mkdir -p baseline-output
+          docker build --platform linux/amd64 -t a590-baseline tools/a590-baseline
+          docker image inspect a590-baseline > baseline-output/container.json
+          docker image inspect debian:bullseye-slim > baseline-output/base-image.json
+          git rev-parse HEAD > baseline-output/source-commit.txt
+      - name: Two clean builds and artifact verification
+        run: docker run --rm --platform linux/amd64 -v "$PWD:/src" a590-baseline bash tools/a590-baseline/build.sh
+      - name: Preserve build evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: a590-101b-baseline
+          path: baseline-output/
+          if-no-files-found: error
