@@ -19,3 +19,18 @@ for path in files:
 (root / "manifest.json").write_text(json.dumps(records, indent=2) + "\n", encoding="utf-8")
 print(json.dumps(records[:2], indent=2))
 print(f"Verified {len(records) - 2} module artifacts")
+
+# Track changes without inventing a hardware-safe growth threshold.
+reference = Path(__file__).resolve().parents[2] / "docs/evidence/baseline-manifest.json"
+if reference.exists():
+    baseline = {item["path"]: item for item in json.loads(reference.read_text(encoding="utf-8-sig"))}
+    current = {item["path"]: item for item in records}
+    changes = []
+    for name in sorted(baseline.keys() | current.keys()):
+        old, new = baseline.get(name), current.get(name)
+        if old != new:
+            changes.append({"path": name, "previous_bytes": old["bytes"] if old else None,
+                            "current_bytes": new["bytes"] if new else None,
+                            "delta_bytes": new["bytes"] - old["bytes"] if old and new else None})
+    (root / "size-changes.json").write_text(json.dumps(changes, indent=2) + "\n", encoding="utf-8")
+    print(f"Artifacts changed relative to recorded baseline: {len(changes)}")

@@ -22,6 +22,8 @@ jobs:
           docker image inspect a590-baseline > baseline-output/container.json
       - name: Two clean builds and artifact verification
         run: docker run --rm --platform linux/amd64 -v "$PWD:/src" a590-baseline bash tools/a590-baseline/build.sh
+      - name: Confirm firmware source stayed unchanged
+        run: git diff --exit-code HEAD -- platform loader core modules lib
       - name: Preserve build evidence
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4

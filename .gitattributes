@@ -1,0 +1,3 @@
+# Keep the baseline container entry scripts usable from Windows checkouts.
+/tools/a590-baseline/* text eol=lf
+/.github/workflows/a590-baseline.yml text eol=lf

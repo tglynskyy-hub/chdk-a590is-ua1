@@ -10,8 +10,7 @@ gcc --version
 make --version
 dpkg-query -W > baseline-output/packages.txt
 command=(make PLATFORM=a590 PLATFORMSUB=101b DEF_SVN_REF=6346)
-printf 'Build command: %q ' "${command[@]}"
-printf '\n'
+printf 'Build command: %s\n' "${command[*]}"
 "${command[@]}" clean
 "${command[@]}" fir
 test -s bin/DISKBOOT.BIN
@@ -26,4 +25,6 @@ cp -r CHDK/MODULES baseline-output/
 cmp baseline-output/DISKBOOT.BIN bin/DISKBOOT.BIN
 diff -r baseline-output/MODULES CHDK/MODULES
 python3 tools/a590-baseline/manifest.py baseline-output
+mkdir -p baseline-output/LICENSES
+cp COPYING doc/6_ubasic_copyright.txt lib/lua/lua.h baseline-output/LICENSES/
 printf 'PASS: two clean builds produced identical DISKBOOT.BIN and modules\n'

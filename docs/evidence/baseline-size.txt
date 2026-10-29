@@ -1,0 +1,2 @@
+   text	   data	    bss	    dec	    hex	filename
+  88148	  42212	  14004	 144364	  233ec	platform/a590/sub/101b/main.elf
