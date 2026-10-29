@@ -1,7 +1,7 @@
-FROM debian:bullseye-slim
+FROM debian:bullseye-slim@sha256:e5b6442dd2e9684cf5e87d8338b5968f3b348636fc0be6d7850a381e3731a2bd
 
 # Fixed package archive; compiler matches the upstream autobuild environment.
-RUN printf 'deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/20251229T000000Z/ bullseye main\n' > /etc/apt/sources.list \
+RUN printf 'deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/20261028T000000Z/ bullseye main\ndeb [check-valid-until=no] http://snapshot.debian.org/archive/debian-security/20261028T000000Z/ bullseye-security main\n' > /etc/apt/sources.list \
  && rm -f /etc/apt/sources.list.d/* \
  && apt-get update \
  && apt-get install --no-install-recommends -y gcc gcc-arm-none-eabi libc6-dev make zip python3 ca-certificates \
