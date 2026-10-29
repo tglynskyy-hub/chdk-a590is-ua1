@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 cd /src
-mkdir -p baseline-output
+mkdir -p baseline-output bin
 exec > >(tee baseline-output/build.log) 2>&1
 printf 'SOURCE_DATE_EPOCH=%s\n' "$SOURCE_DATE_EPOCH"
 arm-none-eabi-gcc --version
