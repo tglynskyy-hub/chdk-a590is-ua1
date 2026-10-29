@@ -1,0 +1,801 @@
+SOURCE_DATE_EPOCH=1766992455
+arm-none-eabi-gcc (15:8-2019-q3-1+b1) 8.3.1 20190703 (release) [gcc-8-branch revision 273027]
+Copyright (C) 2018 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+GNU ld (2.35.2-2+14+b2) 2.35.2
+Copyright (C) 2020 Free Software Foundation, Inc.
+This program is free software; you may redistribute it under the terms of
+the GNU General Public License version 3 or (at your option) a later version.
+This program has absolutely no warranty.
+gcc (Debian 10.2.1-6) 10.2.1 20210110
+Copyright (C) 2020 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+GNU Make 4.3
+Built for x86_64-pc-linux-gnu
+Copyright (C) 1988-2020 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+Build command: make Build command: PLATFORM=a590 Build command: PLATFORMSUB=101b Build command: DEF_SVN_REF=6346
+>> Cleaning in tools
+make[1]: Entering directory '/src/tools'
+>> Cleaning in tools/packfi2
+make[2]: Entering directory '/src/tools/packfi2'
+make[2]: Leaving directory '/src/tools/packfi2'
+>> Cleaning in tools/elf2flt
+make[2]: Entering directory '/src/tools/elf2flt'
+make[2]: Leaving directory '/src/tools/elf2flt'
+make[1]: Leaving directory '/src/tools'
+>> Cleaning in modules
+make[1]: Entering directory '/src/modules'
+>> Cleaning in modules/../lib/lua
+make[2]: Entering directory '/src/lib/lua'
+make[2]: Leaving directory '/src/lib/lua'
+>> Cleaning in modules/../lib/ubasic
+make[2]: Entering directory '/src/lib/ubasic'
+make[2]: Leaving directory '/src/lib/ubasic'
+>> Cleaning in modules/../lib/armutil
+make[2]: Entering directory '/src/lib/armutil'
+make[2]: Leaving directory '/src/lib/armutil'
+>> Cleaning in modules/../lib/lang
+make[2]: Entering directory '/src/lib/lang'
+make[2]: Leaving directory '/src/lib/lang'
+>> Cleaning in modules/../lib/font
+make[2]: Entering directory '/src/lib/font'
+make[2]: Leaving directory '/src/lib/font'
+>> Cleaning in modules/../lib/core
+make[2]: Entering directory '/src/lib/core'
+make[2]: Leaving directory '/src/lib/core'
+>> Cleaning in modules/../lib/libc
+make[2]: Entering directory '/src/lib/libc'
+make[2]: Leaving directory '/src/lib/libc'
+make[1]: Leaving directory '/src/modules'
+>> Cleaning in CHDK
+make[1]: Entering directory '/src/CHDK'
+make[1]: Leaving directory '/src/CHDK'
+>> Cleaning in ./platform/a590
+make[1]: Entering directory '/src/platform/a590'
+make[1]: Leaving directory '/src/platform/a590'
+>> Cleaning in ./platform/a590/sub/101b
+make[1]: Entering directory '/src/platform/a590/sub/101b'
+make[1]: Leaving directory '/src/platform/a590/sub/101b'
+>> Cleaning in ./loader/a590
+make[1]: Entering directory '/src/loader/a590'
+make[1]: Leaving directory '/src/loader/a590'
+**** Build: 1.7.0
+>> Entering to tools
+make[1]: Entering directory '/src/tools'
+>> Entering to tools/packfi2
+make[2]: Entering directory '/src/tools/packfi2'
+fi2enc.c -> fi2enc.o
+aes128.c -> aes128.o
+compress.c -> compress.o
+deflate.c -> deflate.o
+crc32.c -> crc32.o
+zutil.c -> zutil.o
+adler32.c -> adler32.o
+trees.c -> trees.o
+fi2enc.o -> fi2enc
+make[2]: Leaving directory '/src/tools/packfi2'
+<< Leaving tools/packfi2
+>> Entering to tools/elf2flt
+make[2]: Entering directory '/src/tools/elf2flt'
+myio.c -> myio.o
+elf-arm.c -> elf-arm.o
+elfflt.c -> elfflt.o
+main.c -> main.o
+myio.o -> elf2flt
+fltdump.c -> fltdump.o
+fltdump.o -> fltdump
+make[2]: Leaving directory '/src/tools/elf2flt'
+<< Leaving tools/elf2flt
+makeexport.c -> makeexport.o
+makeexport.o -> makeexport
+pakwif.c -> pakwif.o
+pakwif.o -> pakwif
+gensig_vxworks.c -> gensig_vxworks.o
+gensig_vxworks.o -> gensig_vxworks
+-> signatures_vxworks.h
+CAUTION! 'signatures_vxworks.h' is not updated due to 'sig_ref_vxworks_1.bin` or 'sig_ref_vxworks_2.bin` or 'sig_ref_vxworks_3.bin` is empty!
+finsig_vxworks.c -> finsig_vxworks.o
+stubs_load.c -> stubs_load.o
+firmware_load.c -> firmware_load.o
+ptp_op_names.c -> ptp_op_names.o
+finsig_vxworks.o stubs_load.o firmware_load.o ptp_op_names.o -> finsig_vxworks
+gensig_dryos.c -> gensig_dryos.o
+gensig_dryos.o -> gensig_dryos
+-> signatures_dryos.h
+CAUTION! 'signatures_dryos.h' is not updated due to 'sig_ref_dryos_?.bin` is empty!
+finsig_dryos.c -> finsig_dryos.o
+finsig_dryos.o stubs_load.o firmware_load.o ptp_op_names.o -> finsig_dryos
+dancingbits.c -> dancingbits.o
+dancingbits.o -> dancingbits
+font_8x16_pack.c -> font_8x16_pack.o
+font_8x16_pack.o -> font_8x16_pack
+makelang.c -> makelang.o
+makelang.o -> makelang
+code_gen.c -> code_gen.o
+chdk_dasm.c -> chdk_dasm.o
+code_gen.o stubs_load.o firmware_load.o chdk_dasm.o -> code_gen
+gen_conf_lua.c -> gen_conf_lua.o
+gen_conf_lua.o -> gen_conf_lua
+make[1]: Leaving directory '/src/tools'
+<< Leaving tools
+>> Entering to modules
+make[1]: Entering directory '/src/modules'
+>> Entering to modules/../lib/lua
+make[2]: Entering directory '/src/lib/lua'
+setjmp.S -> .o/setjmp.o
+lapi.c -> .o/lapi.o
+lcode.c -> .o/lcode.o
+ldebug.c -> .o/ldebug.o
+ldo.c -> .o/ldo.o
+ldump.c -> .o/ldump.o
+lfunc.c -> .o/lfunc.o
+lgc.c -> .o/lgc.o
+llex.c -> .o/llex.o
+lmem.c -> .o/lmem.o
+lobject.c -> .o/lobject.o
+lopcodes.c -> .o/lopcodes.o
+lparser.c -> .o/lparser.o
+lstate.c -> .o/lstate.o
+lstring.c -> .o/lstring.o
+ltable.c -> .o/ltable.o
+ltm.c -> .o/ltm.o
+lundump.c -> .o/lundump.o
+lvm.c -> .o/lvm.o
+lzio.c -> .o/lzio.o
+lauxlib.c -> .o/lauxlib.o
+lbaselib.c -> .o/lbaselib.o
+ldblib.c -> .o/ldblib.o
+ltablib.c -> .o/ltablib.o
+lmathlib.c -> .o/lmathlib.o
+limathlib.c -> .o/limathlib.o
+lfmathlib.c -> .o/lfmathlib.o
+liolib.c -> .o/liolib.o
+loslib.c -> .o/loslib.o
+lstrlib.c -> .o/lstrlib.o
+loadlib.c -> .o/loadlib.o
+linit.c -> .o/linit.o
+.o/setjmp.o .o/lapi.o .o/lcode.o .o/ldebug.o .o/ldo.o .o/ldump.o .o/lfunc.o .o/lgc.o .o/llex.o .o/lmem.o .o/lobject.o .o/lopcodes.o .o/lparser.o .o/lstate.o .o/lstring.o .o/ltable.o .o/ltm.o .o/lundump.o .o/lvm.o .o/lzio.o .o/lauxlib.o .o/lbaselib.o .o/ldblib.o .o/ltablib.o .o/lmathlib.o .o/limathlib.o .o/lfmathlib.o .o/liolib.o .o/loslib.o .o/lstrlib.o .o/loadlib.o .o/linit.o -> .o/liblua.a
+make[2]: Leaving directory '/src/lib/lua'
+<< Leaving modules/../lib/lua
+>> Entering to modules/../lib/ubasic
+make[2]: Entering directory '/src/lib/ubasic'
+tokenizer.c -> .o/tokenizer.o
+ubasic.c -> .o/ubasic.o
+.o/tokenizer.o .o/ubasic.o -> .o/libubasic.a
+make[2]: Leaving directory '/src/lib/ubasic'
+<< Leaving modules/../lib/ubasic
+>> Entering to modules/../lib/armutil
+make[2]: Entering directory '/src/lib/armutil'
+callfunc.S -> .o/callfunc.o
+reboot.c -> .o/reboot.o
+cache.c -> .o/cache.o
+.o/callfunc.o .o/reboot.o .o/cache.o -> .o/libarmutil.a
+make[2]: Leaving directory '/src/lib/armutil'
+<< Leaving modules/../lib/armutil
+>> Entering to modules/../lib/lang
+make[2]: Entering directory '/src/lib/lang'
+../../tools/makelang -> lang_str.h
+lang.c -> .o/lang.o
+fileutil.c -> .o/fileutil.o
+.o/lang.o .o/fileutil.o -> .o/liblang.a
+make[2]: Leaving directory '/src/lib/lang'
+<< Leaving modules/../lib/lang
+>> Entering to modules/../lib/font
+make[2]: Entering directory '/src/lib/font'
+font_8x16.c -> .o/font_8x16.o
+rbf_font.c -> .o/rbf_font.o
+.o/font_8x16.o .o/rbf_font.o -> .o/libfont.a
+make[2]: Leaving directory '/src/lib/font'
+<< Leaving modules/../lib/font
+>> Entering to modules/../lib/core
+make[2]: Entering directory '/src/lib/core'
+../../core/gui_batt.c -> .o/gui_batt.o
+../../core/gui_space.c -> .o/gui_space.o
+../../core/gui_usb.c -> .o/gui_usb.o
+../../core/gui_mbox.c -> .o/gui_mbox.o
+../../core/gps.c -> .o/gps.o
+../../core/gui_script.c -> .o/gui_script.o
+../../core/gui_menu.c -> .o/gui_menu.o
+../../core/gui_user_menu.c -> .o/gui_user_menu.o
+../../core/suba.c -> .o/suba.o
+../../core/levent.c -> .o/levent.o
+../../core/console.c -> .o/console.o
+../../core/gps_math.c -> .o/gps_math.o
+../../core/live_view.c -> .o/live_view.o
+../../core/action_stack.c -> .o/action_stack.o
+../../core/script.c -> .o/script.o
+../../core/usb_input.c -> .o/usb_input.o
+../../core/usb_module.c -> .o/usb_module.o
+../../core/usb_remote.c -> .o/usb_remote.o
+../../core/autoiso.c -> .o/autoiso.o
+../../modules/module_exportlist.c -> ../../modules/module_hashlist.c
+../../modules/module_hashlist.c -> .o/module_hashlist.o
+../../modules/module_load.c -> .o/module_load.o
+../../core/modules.c -> .o/modules.o
+../../core/versions.c -> .o/versions.o
+.o/gui_batt.o .o/gui_space.o .o/gui_usb.o .o/gui_mbox.o .o/gps.o .o/gui_script.o .o/gui_menu.o .o/gui_user_menu.o .o/suba.o .o/levent.o .o/console.o .o/gps_math.o .o/live_view.o .o/action_stack.o .o/script.o .o/usb_input.o .o/usb_module.o .o/usb_remote.o .o/autoiso.o .o/module_hashlist.o .o/module_load.o .o/modules.o .o/versions.o -> .o/libcore.a
+make[2]: Leaving directory '/src/lib/core'
+<< Leaving modules/../lib/core
+>> Entering to modules/../lib/libc
+make[2]: Entering directory '/src/lib/libc'
+thumb1_case.S -> .o/thumb1_case.o
+.o/thumb1_case.o -> .o/libc.a
+make[2]: Leaving directory '/src/lib/libc'
+<< Leaving modules/../lib/libc
+gui_fselect.c -> .o/gui_fselect.o
+nothumb.c -> .o/nothumb.o
+-> .o/fselect.flt
+edgeoverlay.c -> .o/edgeoverlay.o
+bitvector.c -> .o/bitvector.o
+-> .o/edgeovr.flt
+curves.c -> .o/curves.o
+-> .o/curves.flt
+gui_mpopup.c -> .o/gui_mpopup.o
+-> .o/mpopup.flt
+gui_palette.c -> .o/gui_palette.o
+-> .o/palette.flt
+gui_grid.c -> .o/gui_grid.o
+-> .o/grids.flt
+motion_detector.c -> .o/motion_detector.o
+-> .o/mdetect.flt
+zebra.c -> .o/zebra.o
+-> .o/zebra.flt
+dng.c -> .o/dng.o
+reversebytes.S -> .o/reversebytes.o
+-> .o/_dng.flt
+gui_bench.c -> .o/gui_bench.o
+-> .o/benchm.flt
+gui_calendar.c -> .o/gui_calendar.o
+-> .o/calend.flt
+games/gui_4wins.c -> .o/gui_4wins.o
+-> .o/4wins.flt
+games/gui_mastermind.c -> .o/gui_mastermind.o
+-> .o/mastmind.flt
+games/gui_reversi.c -> .o/gui_reversi.o
+-> .o/reversi.flt
+games/gui_sokoban.c -> .o/gui_sokoban.o
+-> .o/sokoban.flt
+raw_merge.c -> .o/raw_merge.o
+-> .o/_rawop.flt
+gui_read.c -> .o/gui_read.o
+-> .o/txtread.flt
+gui_debug.c -> .o/gui_debug.o
+-> .o/memview.flt
+module_inspector.c -> .o/module_inspector.o
+-> .o/modinsp.flt
+games/gui_tetris.c -> .o/gui_tetris.o
+-> .o/tetris.flt
+games/gui_snake.c -> .o/gui_snake.o
+-> .o/snake.flt
+games/gui_sudoku.c -> .o/gui_sudoku.o
+-> .o/sudoku.flt
+gui_tbox.c -> .o/gui_tbox.o
+-> .o/_tbox.flt
+gui_osd_edit.c -> .o/gui_osd_edit.o
+-> .o/_osd_le.flt
+exmem_inspector.c -> .o/exmem_inspector.o
+-> .o/exmemins.flt
+file_shelter.c -> .o/file_shelter.o
+-> .o/fshelter.flt
+firmware_crc.c -> .o/firmware_crc.o
+-> .o/fwcrc.flt
+gui_hexbox.c -> .o/gui_hexbox.o
+-> .o/_hexbox.flt
+ubasic.c -> .o/ubasic.o
+script_key_funcs.c -> .o/script_key_funcs.o
+-> .o/ubasic.flt
+luascript.c -> .o/luascript.o
+script_shoot_hook.c -> .o/script_shoot_hook.o
+cordic_math.c -> .o/cordic_math.o
+dbg_dump.c -> .o/dbg_dump.o
+rawhookops.c -> .o/rawhookops.o
+-> .o/lua.flt
+cpuinfo.c -> .o/cpuinfo.o
+-> .o/cpuinfo.flt
+user_menu_edit.c -> .o/user_menu_edit.o
+-> .o/useredit.flt
+eyefi.c -> .o/eyefi.o
+md5.c -> .o/md5.o
+sha1.c -> .o/sha1.o
+-> .o/eyefi.flt
+histogram.c -> .o/histogram.o
+-> .o/histo.flt
+shot_histogram.c -> .o/shot_histogram.o
+-> .o/shothist.flt
+scrdump.c -> .o/scrdump.o
+-> .o/scrdump.flt
+conf_migrate.c -> .o/conf_migrate.o
+-> .o/_confmig.flt
+raw_ev_histo.c -> .o/raw_ev_histo.o
+-> .o/rawevhst.flt
+make[1]: Leaving directory '/src/modules'
+<< Leaving modules
+>> Entering to CHDK
+make[1]: Entering directory '/src/CHDK'
+-> LUALIB/GEN/propset1.lua
+-> LUALIB/GEN/propset2.lua
+-> LUALIB/GEN/propset3.lua
+-> LUALIB/GEN/propset4.lua
+-> LUALIB/GEN/propset5.lua
+-> LUALIB/GEN/propset6.lua
+-> LUALIB/GEN/propset7.lua
+-> LUALIB/GEN/propset8.lua
+-> LUALIB/GEN/propset9.lua
+-> LUALIB/GEN/propset10.lua
+-> LUALIB/GEN/propset11.lua
+-> LUALIB/GEN/propset12.lua
+-> LUALIB/GEN/propset13.lua
+-> LUALIB/GEN/modelist.lua
+-> LUALIB/GEN/cnf_core.lua
+-> LUALIB/GEN/cnf_osd.lua
+-> LUALIB/GEN/cnf_user.lua
+-> LUALIB/GEN/cnf_gps.lua
+copy logo.dat
+make[1]: Leaving directory '/src/CHDK'
+<< Leaving CHDK
+>> Entering to ./platform/a590
+make[1]: Entering directory '/src/platform/a590'
+main.c -> main.o
+lib.c -> lib.o
+wrappers.c -> wrappers.o
+kbd.c -> kbd.o
+shooting.c -> shooting.o
+platform_palette.c -> platform_palette.o
+main.o lib.o wrappers.o kbd.o shooting.o platform_palette.o -> libplatform.a
+make[1]: Leaving directory '/src/platform/a590'
+<< Leaving ./platform/a590
+>> Entering to ./platform/a590/sub/101b
+make[1]: Entering directory '/src/platform/a590/sub/101b'
+boot.c -> boot.o
+stubs_min.S -> stubs_min.o
+stubs_auto.S -> stubs_auto.o
+-> stubs_entry.S
+CAUTION! 'stubs_entry.S' is not updated due to target firmware binary not found!
+stubs_entry.S -> stubs_entry.o
+lib.c -> lib.o
+stubs_entry_2.S -> stubs_entry_2.o
+capt_seq.c -> capt_seq.o
+movie_rec.c -> movie_rec.o
+filewrite.c -> filewrite.o
+../../../../core/main.c -> main.thm.o
+../../../../core/gui_draw.c -> gui_draw.thm.o
+../../../../core/memmgmt.c -> memmgmt.thm.o
+../../../../core/gui.c -> gui.thm.o
+../../../../core/kbd_process.c -> kbd_process.thm.o
+../../../../core/kbd_common.c -> kbd_common.thm.o
+../../../../core/conf.c -> conf.thm.o
+../../../../core/gui_osd.c -> gui_osd.thm.o
+../../../../core/raw.c -> raw.thm.o
+../../../../core/usb_sync.c -> usb_sync.thm.o
+../../../../core/shooting.c -> shooting.thm.o
+../../../../core/camera_info.c -> camera_info.thm.o
+../../../../core/remotecap.c -> remotecap.thm.o
+../../../../core/lib_thumb.c -> lib_thumb.thm.o
+../../../../lib/lang/lang_str.c -> lang_str.thm.o
+../../../../core/ptp.c -> ptp.thm.o
+../../../../core/firmware_crc_data.c -> firmware_crc_data.thm.o
+creating bin_compat.h
+boot.o stubs_min.o stubs_auto.o stubs_entry.o lib.o stubs_entry_2.o capt_seq.o movie_rec.o filewrite.o main.thm.o gui_draw.thm.o memmgmt.thm.o gui.thm.o kbd_process.thm.o kbd_common.thm.o conf.thm.o gui_osd.thm.o raw.thm.o usb_sync.thm.o shooting.thm.o camera_info.thm.o remotecap.thm.o lib_thumb.thm.o lang_str.thm.o ptp.thm.o firmware_crc_data.thm.o bin_compat.h -> libplatformsub.a
+../../../../core/entry.S -> entry.o
+-> main.elf
+   text	   data	    bss	    dec	    hex	filename
+  88148	  42212	  14004	 144364	  233ec	main.elf
+main.elf -> main.bin
+make[1]: Leaving directory '/src/platform/a590/sub/101b'
+<< Leaving ./platform/a590/sub/101b
+>> Entering to ./loader/a590
+make[1]: Entering directory '/src/loader/a590'
+entry.S -> entry.o
+main.c -> main.o
+../generic/blobs.S -> blobs.o
+-> main.elf
+main.elf -> main.bin
+make[1]: Leaving directory '/src/loader/a590'
+<< Leaving ./loader/a590
+dance -> DISKBOOT.BIN ver 1
+copy modules
+**** Firmware creation completed successfully
+   text	   data	    bss	    dec	    hex	filename
+  88148	  42212	  14004	 144364	  233ec	platform/a590/sub/101b/main.elf
+>> Cleaning in tools
+make[1]: Entering directory '/src/tools'
+>> Cleaning in tools/packfi2
+make[2]: Entering directory '/src/tools/packfi2'
+make[2]: Leaving directory '/src/tools/packfi2'
+>> Cleaning in tools/elf2flt
+make[2]: Entering directory '/src/tools/elf2flt'
+make[2]: Leaving directory '/src/tools/elf2flt'
+make[1]: Leaving directory '/src/tools'
+>> Cleaning in modules
+make[1]: Entering directory '/src/modules'
+>> Cleaning in modules/../lib/lua
+make[2]: Entering directory '/src/lib/lua'
+make[2]: Leaving directory '/src/lib/lua'
+>> Cleaning in modules/../lib/ubasic
+make[2]: Entering directory '/src/lib/ubasic'
+make[2]: Leaving directory '/src/lib/ubasic'
+>> Cleaning in modules/../lib/armutil
+make[2]: Entering directory '/src/lib/armutil'
+make[2]: Leaving directory '/src/lib/armutil'
+>> Cleaning in modules/../lib/lang
+make[2]: Entering directory '/src/lib/lang'
+make[2]: Leaving directory '/src/lib/lang'
+>> Cleaning in modules/../lib/font
+make[2]: Entering directory '/src/lib/font'
+make[2]: Leaving directory '/src/lib/font'
+>> Cleaning in modules/../lib/core
+make[2]: Entering directory '/src/lib/core'
+make[2]: Leaving directory '/src/lib/core'
+>> Cleaning in modules/../lib/libc
+make[2]: Entering directory '/src/lib/libc'
+make[2]: Leaving directory '/src/lib/libc'
+make[1]: Leaving directory '/src/modules'
+>> Cleaning in CHDK
+make[1]: Entering directory '/src/CHDK'
+make[1]: Leaving directory '/src/CHDK'
+>> Cleaning in ./platform/a590
+make[1]: Entering directory '/src/platform/a590'
+make[1]: Leaving directory '/src/platform/a590'
+>> Cleaning in ./platform/a590/sub/101b
+make[1]: Entering directory '/src/platform/a590/sub/101b'
+make[1]: Leaving directory '/src/platform/a590/sub/101b'
+>> Cleaning in ./loader/a590
+make[1]: Entering directory '/src/loader/a590'
+make[1]: Leaving directory '/src/loader/a590'
+**** Build: 1.7.0
+>> Entering to tools
+make[1]: Entering directory '/src/tools'
+>> Entering to tools/packfi2
+make[2]: Entering directory '/src/tools/packfi2'
+fi2enc.c -> fi2enc.o
+aes128.c -> aes128.o
+compress.c -> compress.o
+deflate.c -> deflate.o
+crc32.c -> crc32.o
+zutil.c -> zutil.o
+adler32.c -> adler32.o
+trees.c -> trees.o
+fi2enc.o -> fi2enc
+make[2]: Leaving directory '/src/tools/packfi2'
+<< Leaving tools/packfi2
+>> Entering to tools/elf2flt
+make[2]: Entering directory '/src/tools/elf2flt'
+myio.c -> myio.o
+elf-arm.c -> elf-arm.o
+elfflt.c -> elfflt.o
+main.c -> main.o
+myio.o -> elf2flt
+fltdump.c -> fltdump.o
+fltdump.o -> fltdump
+make[2]: Leaving directory '/src/tools/elf2flt'
+<< Leaving tools/elf2flt
+makeexport.c -> makeexport.o
+makeexport.o -> makeexport
+pakwif.c -> pakwif.o
+pakwif.o -> pakwif
+gensig_vxworks.c -> gensig_vxworks.o
+gensig_vxworks.o -> gensig_vxworks
+-> signatures_vxworks.h
+CAUTION! 'signatures_vxworks.h' is not updated due to 'sig_ref_vxworks_1.bin` or 'sig_ref_vxworks_2.bin` or 'sig_ref_vxworks_3.bin` is empty!
+finsig_vxworks.c -> finsig_vxworks.o
+stubs_load.c -> stubs_load.o
+firmware_load.c -> firmware_load.o
+ptp_op_names.c -> ptp_op_names.o
+finsig_vxworks.o stubs_load.o firmware_load.o ptp_op_names.o -> finsig_vxworks
+gensig_dryos.c -> gensig_dryos.o
+gensig_dryos.o -> gensig_dryos
+-> signatures_dryos.h
+CAUTION! 'signatures_dryos.h' is not updated due to 'sig_ref_dryos_?.bin` is empty!
+finsig_dryos.c -> finsig_dryos.o
+finsig_dryos.o stubs_load.o firmware_load.o ptp_op_names.o -> finsig_dryos
+dancingbits.c -> dancingbits.o
+dancingbits.o -> dancingbits
+font_8x16_pack.c -> font_8x16_pack.o
+font_8x16_pack.o -> font_8x16_pack
+makelang.c -> makelang.o
+makelang.o -> makelang
+code_gen.c -> code_gen.o
+chdk_dasm.c -> chdk_dasm.o
+code_gen.o stubs_load.o firmware_load.o chdk_dasm.o -> code_gen
+gen_conf_lua.c -> gen_conf_lua.o
+gen_conf_lua.o -> gen_conf_lua
+make[1]: Leaving directory '/src/tools'
+<< Leaving tools
+>> Entering to modules
+make[1]: Entering directory '/src/modules'
+>> Entering to modules/../lib/lua
+make[2]: Entering directory '/src/lib/lua'
+setjmp.S -> .o/setjmp.o
+lapi.c -> .o/lapi.o
+lcode.c -> .o/lcode.o
+ldebug.c -> .o/ldebug.o
+ldo.c -> .o/ldo.o
+ldump.c -> .o/ldump.o
+lfunc.c -> .o/lfunc.o
+lgc.c -> .o/lgc.o
+llex.c -> .o/llex.o
+lmem.c -> .o/lmem.o
+lobject.c -> .o/lobject.o
+lopcodes.c -> .o/lopcodes.o
+lparser.c -> .o/lparser.o
+lstate.c -> .o/lstate.o
+lstring.c -> .o/lstring.o
+ltable.c -> .o/ltable.o
+ltm.c -> .o/ltm.o
+lundump.c -> .o/lundump.o
+lvm.c -> .o/lvm.o
+lzio.c -> .o/lzio.o
+lauxlib.c -> .o/lauxlib.o
+lbaselib.c -> .o/lbaselib.o
+ldblib.c -> .o/ldblib.o
+ltablib.c -> .o/ltablib.o
+lmathlib.c -> .o/lmathlib.o
+limathlib.c -> .o/limathlib.o
+lfmathlib.c -> .o/lfmathlib.o
+liolib.c -> .o/liolib.o
+loslib.c -> .o/loslib.o
+lstrlib.c -> .o/lstrlib.o
+loadlib.c -> .o/loadlib.o
+linit.c -> .o/linit.o
+.o/setjmp.o .o/lapi.o .o/lcode.o .o/ldebug.o .o/ldo.o .o/ldump.o .o/lfunc.o .o/lgc.o .o/llex.o .o/lmem.o .o/lobject.o .o/lopcodes.o .o/lparser.o .o/lstate.o .o/lstring.o .o/ltable.o .o/ltm.o .o/lundump.o .o/lvm.o .o/lzio.o .o/lauxlib.o .o/lbaselib.o .o/ldblib.o .o/ltablib.o .o/lmathlib.o .o/limathlib.o .o/lfmathlib.o .o/liolib.o .o/loslib.o .o/lstrlib.o .o/loadlib.o .o/linit.o -> .o/liblua.a
+make[2]: Leaving directory '/src/lib/lua'
+<< Leaving modules/../lib/lua
+>> Entering to modules/../lib/ubasic
+make[2]: Entering directory '/src/lib/ubasic'
+tokenizer.c -> .o/tokenizer.o
+ubasic.c -> .o/ubasic.o
+.o/tokenizer.o .o/ubasic.o -> .o/libubasic.a
+make[2]: Leaving directory '/src/lib/ubasic'
+<< Leaving modules/../lib/ubasic
+>> Entering to modules/../lib/armutil
+make[2]: Entering directory '/src/lib/armutil'
+callfunc.S -> .o/callfunc.o
+reboot.c -> .o/reboot.o
+cache.c -> .o/cache.o
+.o/callfunc.o .o/reboot.o .o/cache.o -> .o/libarmutil.a
+make[2]: Leaving directory '/src/lib/armutil'
+<< Leaving modules/../lib/armutil
+>> Entering to modules/../lib/lang
+make[2]: Entering directory '/src/lib/lang'
+../../tools/makelang -> lang_str.h
+lang.c -> .o/lang.o
+fileutil.c -> .o/fileutil.o
+.o/lang.o .o/fileutil.o -> .o/liblang.a
+make[2]: Leaving directory '/src/lib/lang'
+<< Leaving modules/../lib/lang
+>> Entering to modules/../lib/font
+make[2]: Entering directory '/src/lib/font'
+font_8x16.c -> .o/font_8x16.o
+rbf_font.c -> .o/rbf_font.o
+.o/font_8x16.o .o/rbf_font.o -> .o/libfont.a
+make[2]: Leaving directory '/src/lib/font'
+<< Leaving modules/../lib/font
+>> Entering to modules/../lib/core
+make[2]: Entering directory '/src/lib/core'
+../../core/gui_batt.c -> .o/gui_batt.o
+../../core/gui_space.c -> .o/gui_space.o
+../../core/gui_usb.c -> .o/gui_usb.o
+../../core/gui_mbox.c -> .o/gui_mbox.o
+../../core/gps.c -> .o/gps.o
+../../core/gui_script.c -> .o/gui_script.o
+../../core/gui_menu.c -> .o/gui_menu.o
+../../core/gui_user_menu.c -> .o/gui_user_menu.o
+../../core/suba.c -> .o/suba.o
+../../core/levent.c -> .o/levent.o
+../../core/console.c -> .o/console.o
+../../core/gps_math.c -> .o/gps_math.o
+../../core/live_view.c -> .o/live_view.o
+../../core/action_stack.c -> .o/action_stack.o
+../../core/script.c -> .o/script.o
+../../core/usb_input.c -> .o/usb_input.o
+../../core/usb_module.c -> .o/usb_module.o
+../../core/usb_remote.c -> .o/usb_remote.o
+../../core/autoiso.c -> .o/autoiso.o
+../../modules/module_exportlist.c -> ../../modules/module_hashlist.c
+../../modules/module_hashlist.c -> .o/module_hashlist.o
+../../modules/module_load.c -> .o/module_load.o
+../../core/modules.c -> .o/modules.o
+../../core/versions.c -> .o/versions.o
+.o/gui_batt.o .o/gui_space.o .o/gui_usb.o .o/gui_mbox.o .o/gps.o .o/gui_script.o .o/gui_menu.o .o/gui_user_menu.o .o/suba.o .o/levent.o .o/console.o .o/gps_math.o .o/live_view.o .o/action_stack.o .o/script.o .o/usb_input.o .o/usb_module.o .o/usb_remote.o .o/autoiso.o .o/module_hashlist.o .o/module_load.o .o/modules.o .o/versions.o -> .o/libcore.a
+make[2]: Leaving directory '/src/lib/core'
+<< Leaving modules/../lib/core
+>> Entering to modules/../lib/libc
+make[2]: Entering directory '/src/lib/libc'
+thumb1_case.S -> .o/thumb1_case.o
+.o/thumb1_case.o -> .o/libc.a
+make[2]: Leaving directory '/src/lib/libc'
+<< Leaving modules/../lib/libc
+gui_fselect.c -> .o/gui_fselect.o
+nothumb.c -> .o/nothumb.o
+-> .o/fselect.flt
+edgeoverlay.c -> .o/edgeoverlay.o
+bitvector.c -> .o/bitvector.o
+-> .o/edgeovr.flt
+curves.c -> .o/curves.o
+-> .o/curves.flt
+gui_mpopup.c -> .o/gui_mpopup.o
+-> .o/mpopup.flt
+gui_palette.c -> .o/gui_palette.o
+-> .o/palette.flt
+gui_grid.c -> .o/gui_grid.o
+-> .o/grids.flt
+motion_detector.c -> .o/motion_detector.o
+-> .o/mdetect.flt
+zebra.c -> .o/zebra.o
+-> .o/zebra.flt
+dng.c -> .o/dng.o
+reversebytes.S -> .o/reversebytes.o
+-> .o/_dng.flt
+gui_bench.c -> .o/gui_bench.o
+-> .o/benchm.flt
+gui_calendar.c -> .o/gui_calendar.o
+-> .o/calend.flt
+games/gui_4wins.c -> .o/gui_4wins.o
+-> .o/4wins.flt
+games/gui_mastermind.c -> .o/gui_mastermind.o
+-> .o/mastmind.flt
+games/gui_reversi.c -> .o/gui_reversi.o
+-> .o/reversi.flt
+games/gui_sokoban.c -> .o/gui_sokoban.o
+-> .o/sokoban.flt
+raw_merge.c -> .o/raw_merge.o
+-> .o/_rawop.flt
+gui_read.c -> .o/gui_read.o
+-> .o/txtread.flt
+gui_debug.c -> .o/gui_debug.o
+-> .o/memview.flt
+module_inspector.c -> .o/module_inspector.o
+-> .o/modinsp.flt
+games/gui_tetris.c -> .o/gui_tetris.o
+-> .o/tetris.flt
+games/gui_snake.c -> .o/gui_snake.o
+-> .o/snake.flt
+games/gui_sudoku.c -> .o/gui_sudoku.o
+-> .o/sudoku.flt
+gui_tbox.c -> .o/gui_tbox.o
+-> .o/_tbox.flt
+gui_osd_edit.c -> .o/gui_osd_edit.o
+-> .o/_osd_le.flt
+exmem_inspector.c -> .o/exmem_inspector.o
+-> .o/exmemins.flt
+file_shelter.c -> .o/file_shelter.o
+-> .o/fshelter.flt
+firmware_crc.c -> .o/firmware_crc.o
+-> .o/fwcrc.flt
+gui_hexbox.c -> .o/gui_hexbox.o
+-> .o/_hexbox.flt
+ubasic.c -> .o/ubasic.o
+script_key_funcs.c -> .o/script_key_funcs.o
+-> .o/ubasic.flt
+luascript.c -> .o/luascript.o
+script_shoot_hook.c -> .o/script_shoot_hook.o
+cordic_math.c -> .o/cordic_math.o
+dbg_dump.c -> .o/dbg_dump.o
+rawhookops.c -> .o/rawhookops.o
+-> .o/lua.flt
+cpuinfo.c -> .o/cpuinfo.o
+-> .o/cpuinfo.flt
+user_menu_edit.c -> .o/user_menu_edit.o
+-> .o/useredit.flt
+eyefi.c -> .o/eyefi.o
+md5.c -> .o/md5.o
+sha1.c -> .o/sha1.o
+-> .o/eyefi.flt
+histogram.c -> .o/histogram.o
+-> .o/histo.flt
+shot_histogram.c -> .o/shot_histogram.o
+-> .o/shothist.flt
+scrdump.c -> .o/scrdump.o
+-> .o/scrdump.flt
+conf_migrate.c -> .o/conf_migrate.o
+-> .o/_confmig.flt
+raw_ev_histo.c -> .o/raw_ev_histo.o
+-> .o/rawevhst.flt
+make[1]: Leaving directory '/src/modules'
+<< Leaving modules
+>> Entering to CHDK
+make[1]: Entering directory '/src/CHDK'
+-> LUALIB/GEN/propset1.lua
+-> LUALIB/GEN/propset2.lua
+-> LUALIB/GEN/propset3.lua
+-> LUALIB/GEN/propset4.lua
+-> LUALIB/GEN/propset5.lua
+-> LUALIB/GEN/propset6.lua
+-> LUALIB/GEN/propset7.lua
+-> LUALIB/GEN/propset8.lua
+-> LUALIB/GEN/propset9.lua
+-> LUALIB/GEN/propset10.lua
+-> LUALIB/GEN/propset11.lua
+-> LUALIB/GEN/propset12.lua
+-> LUALIB/GEN/propset13.lua
+-> LUALIB/GEN/modelist.lua
+-> LUALIB/GEN/cnf_core.lua
+-> LUALIB/GEN/cnf_osd.lua
+-> LUALIB/GEN/cnf_user.lua
+-> LUALIB/GEN/cnf_gps.lua
+copy logo.dat
+make[1]: Leaving directory '/src/CHDK'
+<< Leaving CHDK
+>> Entering to ./platform/a590
+make[1]: Entering directory '/src/platform/a590'
+main.c -> main.o
+lib.c -> lib.o
+wrappers.c -> wrappers.o
+kbd.c -> kbd.o
+shooting.c -> shooting.o
+platform_palette.c -> platform_palette.o
+main.o lib.o wrappers.o kbd.o shooting.o platform_palette.o -> libplatform.a
+make[1]: Leaving directory '/src/platform/a590'
+<< Leaving ./platform/a590
+>> Entering to ./platform/a590/sub/101b
+make[1]: Entering directory '/src/platform/a590/sub/101b'
+boot.c -> boot.o
+stubs_min.S -> stubs_min.o
+stubs_auto.S -> stubs_auto.o
+-> stubs_entry.S
+CAUTION! 'stubs_entry.S' is not updated due to target firmware binary not found!
+stubs_entry.S -> stubs_entry.o
+lib.c -> lib.o
+stubs_entry_2.S -> stubs_entry_2.o
+capt_seq.c -> capt_seq.o
+movie_rec.c -> movie_rec.o
+filewrite.c -> filewrite.o
+../../../../core/main.c -> main.thm.o
+../../../../core/gui_draw.c -> gui_draw.thm.o
+../../../../core/memmgmt.c -> memmgmt.thm.o
+../../../../core/gui.c -> gui.thm.o
+../../../../core/kbd_process.c -> kbd_process.thm.o
+../../../../core/kbd_common.c -> kbd_common.thm.o
+../../../../core/conf.c -> conf.thm.o
+../../../../core/gui_osd.c -> gui_osd.thm.o
+../../../../core/raw.c -> raw.thm.o
+../../../../core/usb_sync.c -> usb_sync.thm.o
+../../../../core/shooting.c -> shooting.thm.o
+../../../../core/camera_info.c -> camera_info.thm.o
+../../../../core/remotecap.c -> remotecap.thm.o
+../../../../core/lib_thumb.c -> lib_thumb.thm.o
+../../../../lib/lang/lang_str.c -> lang_str.thm.o
+../../../../core/ptp.c -> ptp.thm.o
+../../../../core/firmware_crc_data.c -> firmware_crc_data.thm.o
+creating bin_compat.h
+boot.o stubs_min.o stubs_auto.o stubs_entry.o lib.o stubs_entry_2.o capt_seq.o movie_rec.o filewrite.o main.thm.o gui_draw.thm.o memmgmt.thm.o gui.thm.o kbd_process.thm.o kbd_common.thm.o conf.thm.o gui_osd.thm.o raw.thm.o usb_sync.thm.o shooting.thm.o camera_info.thm.o remotecap.thm.o lib_thumb.thm.o lang_str.thm.o ptp.thm.o firmware_crc_data.thm.o bin_compat.h -> libplatformsub.a
+../../../../core/entry.S -> entry.o
+-> main.elf
+   text	   data	    bss	    dec	    hex	filename
+  88148	  42212	  14004	 144364	  233ec	main.elf
+main.elf -> main.bin
+make[1]: Leaving directory '/src/platform/a590/sub/101b'
+<< Leaving ./platform/a590/sub/101b
+>> Entering to ./loader/a590
+make[1]: Entering directory '/src/loader/a590'
+entry.S -> entry.o
+main.c -> main.o
+../generic/blobs.S -> blobs.o
+-> main.elf
+main.elf -> main.bin
+make[1]: Leaving directory '/src/loader/a590'
+<< Leaving ./loader/a590
+dance -> DISKBOOT.BIN ver 1
+copy modules
+**** Firmware creation completed successfully
+[
+  {
+    "path": "DISKBOOT.BIN",
+    "bytes": 131473,
+    "sha256": "e5e09ba13804d2f5b12c08f5558676ef2eb124896458595ef619313ddf5e7f86"
+  },
+  {
+    "path": "main.elf",
+    "bytes": 254352,
+    "sha256": "5cc1d344fad87a0a01a2d38e1dceb1421e24d4fadc557dd85a637f169c5083c8"
+  }
+]
+Verified 38 module artifacts
+PASS: two clean builds produced identical DISKBOOT.BIN and modules

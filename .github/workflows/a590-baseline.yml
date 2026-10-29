@@ -1,0 +1,33 @@
+name: A590 101b baseline
+on:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  baseline:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Build container
+        run: |
+          mkdir -p baseline-output
+          set -o pipefail
+          git rev-parse HEAD > baseline-output/source-commit.txt
+          docker build --platform linux/amd64 -t a590-baseline tools/a590-baseline 2>&1 | tee baseline-output/container-build.log
+          docker image inspect a590-baseline > baseline-output/container.json
+      - name: Two clean builds and artifact verification
+        run: docker run --rm --platform linux/amd64 -v "$PWD:/src" a590-baseline bash tools/a590-baseline/build.sh
+      - name: Confirm firmware source stayed unchanged
+        run: git diff --exit-code HEAD -- platform loader core modules lib
+      - name: Preserve build evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: a590-101b-baseline
+          path: baseline-output/
+          if-no-files-found: error
