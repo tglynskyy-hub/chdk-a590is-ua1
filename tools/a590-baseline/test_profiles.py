@@ -8,7 +8,7 @@ import package
 import audit_modules
 
 root = Path(sys.argv[1])
-stem = 'CHDK-A590IS-101B-1.7.0-r6346-'
+stem = 'CHDK-A590IS-101B-1.7.0-r6346-enhanced-'
 data = {}
 reports = {}
 for profile in ('full', 'photography'):
@@ -18,8 +18,9 @@ for profile in ('full', 'photography'):
     reports[profile] = json.loads(path.with_suffix('.json').read_text())
 full, photo = data['full'], data['photography']
 package.require(set(full) - set(photo) == package.excluded_paths('photography'), 'Wrong profile delta')
+package.require(set(photo) - set(full) == {'CHDK/DATA/PHOTO_UI.TXT'}, 'Wrong Photography defaults marker')
 for name in photo:
-    if name != 'PACKAGE-MANIFEST.json':
+    if name not in ('PACKAGE-MANIFEST.json', 'CHDK/DATA/PHOTO_UI.TXT'):
         package.require(full[name] == photo[name], 'Shared file differs: ' + name)
 
 
@@ -63,12 +64,16 @@ else:
     raise AssertionError('Accepted Full as Photography')
 size_row = (package.ROOT / 'baseline-output/size.txt').read_text().splitlines()[-1].split()
 sections = dict(zip(('text', 'data', 'bss'), map(int, size_row[:3])))
-package.require(sections == {'text': 88148, 'data': 42212, 'bss': 14004}, 'Baseline section size changed')
+baseline_sections = {'text': 88148, 'data': 42212, 'bss': 14004}
+delta = {k: sections[k] - baseline_sections[k] for k in sections}
+# Review budgets, NOT a measurement of camera free RAM or a safety claim.
+for k, budget in {'text': 16384, 'data': 8192, 'bss': 256}.items():
+    package.require(delta[k] <= budget, 'Unreviewed section growth: ' + k)
 comparison = {
     'profiles': reports,
     'diskboot_identical': full['DISKBOOT.BIN'] == photo['DISKBOOT.BIN'],
     'diskboot_sha256': package.sha(photo['DISKBOOT.BIN']),
-    'sections_each_profile': sections, 'section_delta': {'text': 0, 'data': 0, 'bss': 0},
+    'sections_each_profile': sections, 'section_delta': delta,
     'zip_bytes_saved': reports['full']['bytes'] - reports['photography']['bytes'],
     'payload_bytes_saved': sum(len(full[n]) for n in set(full) - set(photo)),
     'excluded_paths': sorted(set(full) - set(photo)), 'new_hardware_tests': False,
@@ -76,4 +81,4 @@ comparison = {
 (package.ROOT / 'baseline-output/profile-comparison.json').write_text(json.dumps(comparison, indent=2) + '\n')
 (package.ROOT / 'baseline-output/module-inventory.json').write_text(json.dumps(inventory, indent=2) + '\n')
 print(json.dumps(comparison, indent=2))
-print('PASS: both manifests, identical shared payload, exact exclusions, baseline sections and dependency closure')
+print('PASS: both manifests, identical shared payload, exact exclusions, reviewed section budgets and dependency closure')

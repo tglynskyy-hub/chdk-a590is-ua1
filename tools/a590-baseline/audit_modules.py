@@ -68,7 +68,7 @@ def inventory():
     baseline = json.loads((ROOT / 'docs/evidence/baseline-manifest.json').read_text())
     hashes = {Path(e['path']).name: e for e in baseline if e['path'].startswith('MODULES/')}
     records = []
-    cfiles = sorted(p for d in ('core', 'modules', 'lib') for p in (ROOT / d).rglob('*.c'))
+    cfiles = sorted(p for d in ('core', 'modules', 'lib') for p in (ROOT / d).rglob('*') if p.suffix in ('.c', '.inc'))
     for row in ROWS.strip().splitlines():
         name, category, source, purpose = row.split('|')
         sources = ['modules/' + source + '.c'] + SUPPORT.get(name, [])
@@ -101,7 +101,7 @@ def inventory():
             'photography_included': not removable,
             'exclusion_safety': 'Reviewed standalone leaf; no core service dependency' if removable else 'Retain: compatibility or untested feature dependency',
             'gui_after_exclusion': 'Dynamic entry absent; Games/Tools parent remains. Cached menu needs restart after card changes.' if removable else 'Not excluded; existing GUI preserved',
-            'script_impact': 'No ordinary photography API removed; saved user-menu module shortcut will fail and must be removed.' if removable else 'Existing script APIs preserved by retaining module and dependencies',
+            'script_impact': 'No ordinary photography API removed; missing saved user-menu module shortcut shows a localized explanation.' if removable else 'Existing script APIs preserved by retaining module and dependencies',
             'resident_ram_saved_bytes': 0,
             'ram_note': 'SD exclusion does not shrink core. On-demand code/BSS only allocated when loaded; dynamic menu metadata can differ.',
             'baseline_bytes': hashes[name + '.flt']['bytes'], 'baseline_sha256': hashes[name + '.flt']['sha256'],
