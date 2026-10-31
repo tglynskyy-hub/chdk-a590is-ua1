@@ -22,8 +22,17 @@ jobs:
           docker image inspect a590-baseline > baseline-output/container.json
       - name: Two clean builds and artifact verification
         run: docker run --rm --platform linux/amd64 -v "$PWD:/src" a590-baseline bash tools/a590-baseline/build.sh
+      - name: Two complete upstream distributions and strict SD package verification
+        run: docker run --rm --platform linux/amd64 -v "$PWD:/src" a590-baseline bash tools/a590-baseline/package.sh
       - name: Confirm firmware source stayed unchanged
         run: git diff --exit-code HEAD -- platform loader core modules lib
+      - name: Publish verified full SD installation package
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: CHDK-A590IS-101B-1.7.0-r6346-full
+          path: sd-package-output/
+          if-no-files-found: error
+          compression-level: 0
       - name: Preserve build evidence
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
