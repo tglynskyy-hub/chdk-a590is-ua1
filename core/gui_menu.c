@@ -1,4 +1,3 @@
-#include "camera.h"
 #include "camera_info.h"
 #include "conf.h"
 #include "keyboard.h"
@@ -449,7 +448,6 @@ static void select_proc()
 {
     if (curr_menu->menu[gui_menu_curr_item].menu_function)
     {
-#ifdef CAM_PHOTOGRAPHY_UI
         // Old user-menu shortcuts may refer to games omitted by Photography.
         if (curr_menu->menu[gui_menu_curr_item].menu_function == (menu_proc)module_run &&
             !gui_photo_module_available((const char*)curr_menu->menu[gui_menu_curr_item].arg))
@@ -458,7 +456,6 @@ static void select_proc()
                           MBOX_BTN_OK|MBOX_TEXT_CENTER, 0);
             return;
         }
-#endif
         curr_menu->menu[gui_menu_curr_item].menu_function(curr_menu->menu[gui_menu_curr_item].arg);
         gui_menu_redraw=2;
     }

@@ -1303,7 +1303,7 @@ const char* gui_subj_dist_override_value_enum(int change, __attribute__ ((unused
 
 const char* gui_subj_dist_override_koef_enum(int change, __attribute__ ((unused))int arg)
 {
-    static const char* modes[] = { (char*)LANG_PHOTO_ENUM_712, (char*)LANG_PHOTO_ENUM_713, (char*)LANG_PHOTO_ENUM_717 };
+    static const char* modes[] = { (char*)LANG_PHOTO_ENUM_715, (char*)LANG_PHOTO_ENUM_716, "Inf" };
     return gui_change_simple_enum(&conf.subj_dist_override_koef,change,modes,sizeof(modes)/sizeof(modes[0]));
 }
 
@@ -2223,6 +2223,7 @@ CMenu root_menu = {0x20,LANG_MENU_MAIN_TITLE, root_menu_items };
 #include "gui_photo.inc"
 #else
 CMenu* gui_get_root_menu() { return &root_menu; }
+int gui_photo_module_available(__attribute__((unused)) const char *name) { return 1; }
 #endif
 
 //-------------------------------------------------------------------

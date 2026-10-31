@@ -20,7 +20,7 @@ for filename in ('core/gui.c', 'core/gui_menu.c', 'core/gui_user_menu.c'):
 menu = (ROOT / 'core/gui_menu.c').read_text()
 assert menu.index('gui_menu_stack_ptr >= MENUSTACK_MAXDEPTH') < menu.index('gui_menu_stack[gui_menu_stack_ptr].menu =')
 assert 'gui_photo_module_available' in menu and 'LANG_PHOTO_MODULE_MISSING' in menu
-assert '#include "camera.h"' in menu
+assert '#include "camera.h"' not in menu  # shared lib/core must remain platform independent
 assert not re.search(r'\b(malloc|calloc|shoot|set_focus|SleepTask|while)\s*\(', source)
 
 prefix = r'''

@@ -51,6 +51,9 @@ def validate(english, ukrainian):
     assert size < 32766, '15-bit language offsets overflow'
     assert formats(ukrainian[107]) == ['s'] * 8
     assert formats(ukrainian[109]) == ['d', 'd', 'X']
+    # gui_menu.c allocates seven built-in glyphs to enum values.
+    for key in range(712, 744):
+        assert len(ukrainian[key]) <= 7, 'Enum width ID ' + str(key)
     # Actual GUI build-info/memory sprintf consumers use a 256-byte buffer.
     build = ukrainian[107].replace('\\n', '\n') % ('1.7.0', 'r6346', '6346', 'Dec 29 2025', '09:54:14', 'a590', '101b', '8.3.1')
     memory = ukrainian[109].replace('\\n', '\n') % (2147483647, 2147483647, 0xffffffff)
