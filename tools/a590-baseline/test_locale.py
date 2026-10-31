@@ -72,10 +72,12 @@ def validate(english, ukrainian):
     assert max(map(len, memory.splitlines())) <= 35
     cp = (ROOT / 'lib/font/codepages.h').read_text()
     cp = re.search(r'cp_win_1251\[\].*?\{(.*?)\};', cp, re.S)[1]
+    mapping = [int(n, 16) for n in re.findall(r'0x[0-9A-Fa-f]+', cp)]
     glyphs = (ROOT / 'lib/font/font_8x16_uni.h').read_text()
     for char in set(''.join(ukrainian.values())) | set('ҐґЄєІіЇї'):
         if ord(char) >= 128:
             assert '0x%04X' % ord(char) in cp, 'Codepage glyph ' + char
+            assert mapping[char.encode('cp1251')[0] - 128] == ord(char), 'Wrong glyph mapping ' + char
             assert re.search(r'\{\s*0x%04X\s*,' % ord(char), glyphs), 'Font glyph ' + char
     # Detect accidental UTF-8-as-CP1251, including common mojibake characters.
     assert not any(c in ''.join(ukrainian.values()) for c in 'ЂЃљњќћџЎў')

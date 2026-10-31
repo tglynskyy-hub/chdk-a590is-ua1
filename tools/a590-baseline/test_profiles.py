@@ -47,6 +47,8 @@ def reject_package(label, mutate):
 reject_package('excluded game reintroduced', lambda f: f.update({'CHDK/MODULES/snake.flt': full['CHDK/MODULES/snake.flt']}))
 reject_package('missing Lua dependency', lambda f: f.pop('CHDK/MODULES/mdetect.flt'))
 reject_package('missing generated resource', lambda f: f.pop('CHDK/LUALIB/GEN/cnf_core.lua'))
+reject_package('missing Photography defaults marker', lambda f: f.pop('CHDK/DATA/PHOTO_UI.TXT'))
+reject_package('wrong module despite updated checksum', lambda f: f.update({'CHDK/MODULES/lua.flt': f['CHDK/MODULES/lua.flt'] + b'old'}))
 reject_package('modified resource with valid checksum', lambda f: f.update({'CHDK/SCRIPTS/interval.lua': b'wrong'}))
 inventory = package.module_inventory()
 names = {m['name'] for m in inventory['modules'] if m['photography_included']}
