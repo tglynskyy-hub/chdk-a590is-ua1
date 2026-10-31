@@ -58,7 +58,8 @@ compat-check disabling, native Lua forcing не ввімкнено. Defaults і�
 `CHDK/MODULES/*.flt` — узгоджені динамічні модулі. `PS.FIR` для VxWorks тут
 не застосовується; `PS.FI2` не генерується без OPT_FI2/keys і не потрібен baseline.
 Не перейменовувати ELF у DISKBOOT. CI artifact із модулями не містить усього
-user resource tree; для SD потрібен повний пакет CHDK цього самого source/build.
+user resource tree; для SD потрібен повний пакет CHDK цього самого source/build
+(Task 002A, нижче).
 
 `manifest.json` містить SHA-256 і розмір кожного binary/ELF/module;
 `size.txt` — text/data/BSS, `symbols.txt` — linker symbols,
@@ -123,3 +124,40 @@ byte delta та hash-only changes; CI не вигадує safe RAM threshold. П
 toolchain оновлення baseline вимагає явного аналізу. Перевірка незмінності source
 після make додана окремим CI step. Ліцензійні повідомлення додаються до наступних
 artifact packages в `LICENSES/`; джерела відповідають `source-commit.txt` у цьому repo.
+
+## Task 002A: повний SD-пакет
+
+Історичний baseline ZIP вище залишається evidence artifact. Окремий installation
+artifact має назву **CHDK-A590IS-101B-1.7.0-r6346-full** і містить однойменний
+`.zip`, `.sha256` і `.json` із точним розміром/хешем. GitHub обгортає ці три файли
+у власний ZIP; його digest відрізняється від checksum внутрішнього SD ZIP.
+
+Після baseline command виконайте в тому самому checkout/container:
+
+```sh
+git rev-parse HEAD > baseline-output/source-commit.txt
+docker run --rm --platform linux/amd64 -v "$PWD:/src" a590-baseline bash tools/a590-baseline/package.sh
+```
+
+`package.sh` двічі викликає upstream `firzipsubcomplete` з PLATFORM=a590,
+PLATFORMSUB=101b, DEF_SVN_REF=6346 і фіксованим ZIPDATE. Ціль сама виконує clean,
+будує binaries/resources і створює повний upstream ZIP. `package.py` перевіряє
+його, додає ліцензії/інструкції/source provenance і нормалізує порядок, timestamps,
+permissions та ZIP metadata. Відтворюваність стосується **повного внутрішнього
+ZIP** для того самого source commit, docs і pinned container; оболонка Actions
+і журнали runner не є deterministic artifacts. Два незалежні clean packaging
+build порівнюються побайтово. Toolchain і firmware config із Task 001 незмінні.
+
+Перевірки: exact Task001 DISKBOOT SHA/size; exact 38 FLT SHA/size та множина
+імен; повне upstream runtime tree та байти ресурсів; 18 generated Lua files;
+camera/revision camnotes і package identity; усі файли непорожні; ліцензії;
+SHA256/size manifest; відсутність ELF/FI2/FIR/objects; безпечні шляхи, відсутність
+case collisions; CRC і фактичне розпакування з повторним хешуванням. Негативні
+тести відхиляють missing module/license, empty resource, підмінений DISKBOOT
+навіть із перерахованим manifest, case collision, traversal і зайвий ELF.
+Manifest охоплює всі файли, крім самого себе; його цілісність покриває ZIP SHA.
+Опис filesystem/BOOTDISK/LOCK і відкат: [Windows install](SD_INSTALL_WINDOWS.md),
+[rollback](SD_ROLLBACK.md). CI не торкається SD і не є фізичним тестом камери.
+
+Повний source відповідає `source_commit`/`source_url` усередині manifest; зберігайте
+його разом із пакетом для виконання вимог ліцензій при подальшому поширенні.
