@@ -161,3 +161,24 @@ Manifest охоплює всі файли, крім самого себе; йо�
 
 Повний source відповідає `source_commit`/`source_url` усередині manifest; зберігайте
 його разом із пакетом для виконання вимог ліцензій при подальшому поширенні.
+
+## Task003: два профілі
+
+Ті самі build/package команди тепер створюють Full (38 FLT) і Photography
+(30 FLT) у `sd-package-output/full/` та `sd-package-output/photography/`.
+Два clean upstream builds генерують обидва профілі; кожен ZIP порівнюється між
+проходами. `test_profiles.py` перевіряє exact set difference, усі спільні байти,
+profile identity, dependency closure та ELF sections. Вилучені FLT і Sokoban
+data не можуть випадково повернутися через overlay. Негативні тести доходять
+до semantic gates навіть із перерахованими checksum manifest.
+
+Кожен Actions artifact містить installation ZIP, `.sha256`, `.json`,
+`module-inventory.json` і `profile-comparison.json`. Evidence artifact містить
+build/package logs, `profile-tests.txt`, `locale-inventory.json`, baseline
+section/symbol/size comparison reports. Точні ZIP bytes/SHA визначаються CI
+для source commit; обидва DISKBOOT мають незмінний Task001 SHA.
+
+Фізичний статус оновлено в HARDWARE_TEST_MATRIX.md: користувач підтвердив
+Task002A baseline. Це не переноситься на нові пакети автоматично.
+Усі нові правила встановлення/чистого переходу між профілями —
+[DISTRIBUTION_PROFILES.md](DISTRIBUTION_PROFILES.md).
