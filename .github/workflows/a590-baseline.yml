@@ -30,7 +30,14 @@ jobs:
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: CHDK-A590IS-101B-1.7.0-r6346-full
-          path: sd-package-output/
+          path: sd-package-output/full/
+          if-no-files-found: error
+          compression-level: 0
+      - name: Publish verified Photography SD installation package
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: CHDK-A590IS-101B-1.7.0-r6346-photography
+          path: sd-package-output/photography/
           if-no-files-found: error
           compression-level: 0
       - name: Preserve build evidence

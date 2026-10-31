@@ -2,7 +2,9 @@
 
 Пакет `CHDK-A590IS-101B-1.7.0-r6346-full.zip` призначений тільки для **A590 IS,
 Canon GM1.01B**, CHDK 1.7.0 r6346. Це кандидат для контрольованого фізичного тесту:
-CI перевіряє файли, але камера ще не перевірена. Постійна прошивка Canon не змінюється.
+CI перевіряє файли. Користувач підтвердив базові фізичні тести r6346 із Task 002A;
+нові профілі Task003 ще не перевірені (див. HARDWARE_TEST_MATRIX.md у репозиторії).
+Постійна прошивка Canon не змінюється.
 Жодна команда підготовки карти не запускається CI або скриптами цього репозиторію.
 
 ## 1. Що підтримує камера
@@ -152,7 +154,8 @@ foreach ($entry in $manifest.files) {
         throw "Package mismatch: $($entry.path)"
     }
 }
-if ((Get-ChildItem "$stage\CHDK\MODULES\*.flt").Count -ne 38) { throw 'Expected 38 modules' }
+$expectedModules = if ($manifest.profile -eq 'photography') { 30 } else { 38 }
+if ((Get-ChildItem "$stage\CHDK\MODULES\*.flt").Count -ne $expectedModules) { throw 'Wrong module count' }
 ```
 
 Вміст: DISKBOOT; 38 FLT; повне upstream дерево CHDK із SCRIPTS, LANG, FONTS,

@@ -6,10 +6,25 @@ import json
 from pathlib import Path, PurePosixPath
 import tempfile
 import zipfile
+from functools import lru_cache
+import audit_modules
 
 ROOT = Path(__file__).resolve().parents[2]
 NAME = 'CHDK-A590IS-101B-1.7.0-r6346-full.zip'
 IDENTITY = {'platform': 'a590', 'firmware': '101b', 'chdk': '1.7.0', 'svn': 6346}
+
+
+@lru_cache(maxsize=1)
+def module_inventory():
+    return audit_modules.inventory()
+
+
+def excluded_paths(profile):
+    require(profile in ('full', 'photography'), 'Unknown profile')
+    if profile == 'full':
+        return set()
+    return {'CHDK/MODULES/' + m['name'] for m in module_inventory()['modules']
+            if not m['photography_included']} | {'CHDK/GAMES/SOKOBAN.LEV'}
 
 
 def require(condition, message):
@@ -39,7 +54,8 @@ def read_zip(path):
         return result
 
 
-def validate_payload(files):
+def validate_payload(files, profile='full'):
+    excluded = excluded_paths(profile)
     baseline = json.loads((ROOT / 'docs/evidence/baseline-manifest.json').read_text())
     expected_modules = set()
     for item in baseline:
@@ -48,13 +64,17 @@ def validate_payload(files):
         name = item['path']
         if name.startswith('MODULES/'):
             name = 'CHDK/' + name
+            if name in excluded:
+                continue
             expected_modules.add(name)
         require(name in files, 'Missing baseline file: ' + name)
         require(len(files[name]) == item['bytes'] and sha(files[name]) == item['sha256'],
                 'Task 001 mismatch: ' + name)
-    require(len(expected_modules) == 38, 'Expected 38 baseline modules')
+    require(len(expected_modules) == (38 if profile == 'full' else 30), 'Wrong module count')
     actual_modules = {n for n in files if n.startswith('CHDK/MODULES/')}
     require(actual_modules == expected_modules, 'Unexpected/missing modules')
+    require(not (set(files) & excluded), 'Excluded files leaked into profile')
+    audit_modules.check_profile(module_inventory(), {PurePosixPath(n).name for n in actual_modules})
     require(not any(n.lower().endswith(('.elf', '.o', '.a', '.fi2', '.fir'))
                     or PurePosixPath(n).name == 'Makefile' for n in files),
             'Build intermediate or firmware-update image in package')
@@ -69,6 +89,8 @@ def validate_payload(files):
             continue
         if path.parent == ROOT / 'CHDK' and path.match('logo*.dat'):
             continue
+        if name in excluded:
+            continue
         runtime[name] = path.read_bytes()
     require({n for n in files if n.startswith('CHDK/')} == set(runtime),
             'Runtime tree membership differs from upstream output')
@@ -76,6 +98,8 @@ def validate_payload(files):
         require(files[name] == content, 'Runtime content mismatch: ' + name)
     for directory in ('SCRIPTS', 'LANG', 'FONTS', 'SYMBOLS', 'GRIDS', 'LUALIB',
                       'CURVES', 'DATA', 'BOOKS', 'GAMES', 'HELP'):
+        if directory == 'GAMES' and profile == 'photography':
+            continue
         require(any(n.startswith('CHDK/' + directory + '/') for n in files),
                 'Missing resource directory: ' + directory)
     generated = ['propset%d.lua' % n for n in range(1, 14)]
@@ -87,11 +111,15 @@ def validate_payload(files):
         require(name in files, 'Missing required resource: ' + name)
 
 
-def verify(path):
+def verify(path, expected_profile=None):
     files = read_zip(path)
     manifest = json.loads(files.pop('PACKAGE-MANIFEST.json'))
     require(manifest['identity'] == IDENTITY, 'Wrong package identity')
     require(manifest['hardware_tested'] is False, 'Invalid hardware claim')
+    profile = manifest['profile']
+    excluded_paths(profile)
+    if expected_profile is not None:
+        require(profile == expected_profile, 'Profile identity mismatch')
     entries = manifest['files']
     require(len(entries) == len({e['path'] for e in entries}), 'Duplicate manifest entries')
     require(set(files) == {e['path'] for e in entries}, 'Manifest membership mismatch')
@@ -100,9 +128,11 @@ def verify(path):
         require(len(data) == item['bytes'] and sha(data) == item['sha256'],
                 'Manifest mismatch: ' + item['path'])
     for name in ('LICENSES/COPYING', 'LICENSES/ubasic.txt', 'LICENSES/lua.h',
-                 'INSTALL/SD_INSTALL_WINDOWS.md', 'INSTALL/SD_ROLLBACK.md'):
+                 'INSTALL/SD_INSTALL_WINDOWS.md', 'INSTALL/SD_ROLLBACK.md',
+                 'INSTALL/DISTRIBUTION_PROFILES.md', 'MODULE-INVENTORY.json'):
         require(name in files, 'Missing license/guide: ' + name)
-    validate_payload(files)
+    require(json.loads(files['MODULE-INVENTORY.json']) == module_inventory(), 'Inventory mismatch')
+    validate_payload(files, profile)
     # Actually extract and rehash, in addition to checking compressed ZIP CRCs.
     with tempfile.TemporaryDirectory() as tmp:
         with zipfile.ZipFile(path) as archive:
@@ -113,7 +143,7 @@ def verify(path):
     return manifest
 
 
-def build(upstream, output, source_commit):
+def build(upstream, output, source_commit, profile='full'):
     files = read_zip(upstream)
     validate_payload(files)
     require(set(n for n in files if not n.startswith('CHDK/')) ==
@@ -125,10 +155,15 @@ def build(upstream, output, source_commit):
         'LICENSES/lua.h': 'lib/lua/lua.h',
         'INSTALL/SD_INSTALL_WINDOWS.md': 'docs/SD_INSTALL_WINDOWS.md',
         'INSTALL/SD_ROLLBACK.md': 'docs/SD_ROLLBACK.md',
+        'INSTALL/DISTRIBUTION_PROFILES.md': 'docs/DISTRIBUTION_PROFILES.md',
     }.items():
         files[target] = (ROOT / source).read_bytes()
+    for name in excluded_paths(profile):
+        require(name in files, 'Expected exclusion absent upstream: ' + name)
+        del files[name]
+    files['MODULE-INVENTORY.json'] = (json.dumps(module_inventory(), indent=2, sort_keys=True) + '\n').encode()
     manifest = {
-        'identity': IDENTITY, 'hardware_tested': False,
+        'identity': IDENTITY, 'profile': profile, 'hardware_tested': False,
         'source_commit': source_commit,
         'source_url': 'https://github.com/tglynskyy-hub/chdk-a590is-ua1/tree/' + source_commit,
         'baseline_manifest': 'docs/evidence/baseline-manifest.json',
@@ -143,9 +178,10 @@ def build(upstream, output, source_commit):
             entry.external_attr = 0o100644 << 16
             entry.compress_type = zipfile.ZIP_DEFLATED
             archive.writestr(entry, content, compresslevel=9)
-    verify(output)
+    verify(output, profile)
     report = {'archive': output.name, 'bytes': output.stat().st_size,
-              'sha256': sha(output.read_bytes()), 'files': len(files), 'modules': 38,
+              'sha256': sha(output.read_bytes()), 'files': len(files),
+              'modules': len([n for n in files if n.startswith('CHDK/MODULES/')]), 'profile': profile,
               'identity': IDENTITY, 'source_commit': source_commit, 'hardware_tested': False}
     output.with_suffix('.json').write_text(json.dumps(report, indent=2) + '\n', encoding='utf-8')
     output.with_suffix('.sha256').write_text(report['sha256'] + '  ' + output.name + '\n')
@@ -157,5 +193,6 @@ if __name__ == '__main__':
     parser.add_argument('upstream', type=Path)
     parser.add_argument('output', type=Path)
     parser.add_argument('source_commit')
+    parser.add_argument('--profile', choices=('full', 'photography'), default='full')
     args = parser.parse_args()
-    build(args.upstream, args.output, args.source_commit)
+    build(args.upstream, args.output, args.source_commit, args.profile)
