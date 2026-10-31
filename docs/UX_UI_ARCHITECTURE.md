@@ -1,5 +1,10 @@
 # Фотографічний UI: проєкт архітектури
 
+> **Оновлення Task 004.** Task 004: Photography UI тепер реалізовано в `core/gui_photo.inc`,
+> з інтеграцією в gui.c/conf.c та чинний menu engine. Classic і збереження
+> вибору працюють без перезапуску на рівні коду; фізична перевірка ще потрібна.
+> [Фактична ієрархія та checklist](PHOTOGRAPHY_UI.md). Нижче — попередній дизайн.
+
 Статус Task003: **дизайн, не реалізований UI**. Shared runtime не змінюється;
 обидва профілі запускають Classic як раніше. Окремий rendering engine недоцільний:
 наявні `CMenu/CMenuItem`, `core/gui_menu.c`, `core/gui.c`, `gui_set_mode`, RBF

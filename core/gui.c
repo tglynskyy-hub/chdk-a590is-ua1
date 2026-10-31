@@ -113,7 +113,7 @@ static const char* gui_change_simple_enum(int* value, int change, const char** i
 
 //-------------------------------------------------------------------
 
-const char* gui_bracket_values_modes[] = { (char*)LANG_PHOTO_ENUM_712, "1/3 Ev","2/3 Ev", "1 Ev", "1 1/3Ev", "1 2/3Ev", "2 Ev", "2 1/3Ev", "2 2/3Ev", "3 Ev", "3 1/3Ev", "3 2/3Ev", "4 Ev" };
+const char* gui_bracket_values_modes[] = { (char*)LANG_PHOTO_ENUM_OFF, "1/3 Ev","2/3 Ev", "1 Ev", "1 1/3Ev", "1 2/3Ev", "2 Ev", "2 1/3Ev", "2 2/3Ev", "3 Ev", "3 1/3Ev", "3 2/3Ev", "4 Ev" };
 const char* gui_bracket_type_modes[] =   { "+/-", "-", "+", "-/+" };
 
 static CMenuItem sd_bracket[2] = {
@@ -221,12 +221,12 @@ static CMenu remote_submenu = {0x86,LANG_MENU_REMOTE_PARAM_TITLE, remote_submenu
 
 //-------------------------------------------------------------------
 
-static const char* gui_autoiso_shutter_modes[] = { (char*)LANG_PHOTO_ENUM_714, "1/2", "1/4", "1/6", "1/8", "1/15", "1/30", "1/60", "1/125", "1/250", "1/500", "1/1000", "1/2000" };
+static const char* gui_autoiso_shutter_modes[] = { (char*)LANG_PHOTO_ENUM_AUTO, "1/2", "1/4", "1/6", "1/8", "1/15", "1/30", "1/60", "1/125", "1/250", "1/500", "1/1000", "1/2000" };
 
-static const char* gui_autoiso2_shutter_modes[] = { (char*)LANG_PHOTO_ENUM_712, "1", "1/2","1/4", "1/6", "1/8", "1/12", "1/15", "1/20", "1/25", "1/30",
+static const char* gui_autoiso2_shutter_modes[] = { (char*)LANG_PHOTO_ENUM_OFF, "1", "1/2","1/4", "1/6", "1/8", "1/12", "1/15", "1/20", "1/25", "1/30",
                                                     "1/40", "1/50", "1/60", "1/80", "1/100", "1/125", "1/160", "1/250", "1/500", "1/1000", "1/2000" };
 
-static const char* gui_overexp_ev_modes[] = { (char*)LANG_PHOTO_ENUM_712, "-1/3 Ev", "-2/3 Ev", "-1 Ev", "-1 1/3Ev", "-1 2/3Ev", "-2 Ev" };
+static const char* gui_overexp_ev_modes[] = { (char*)LANG_PHOTO_ENUM_OFF, "-1/3 Ev", "-2/3 Ev", "-1 Ev", "-1 1/3Ev", "-1 2/3Ev", "-2 Ev" };
 
 static CMenuItem autoiso_submenu_items[] = {
     MENU_ITEM   (0x5c,LANG_MENU_AUTOISO_ENABLED,            MENUITEM_BOOL,                                      &conf.autoiso_enable,           0 ),
@@ -1261,9 +1261,9 @@ const char* tv_override_value_string()
 }
 
 static const char* gui_tv_enum_type[] = {
-    (char*)LANG_PHOTO_ENUM_741, (char*)LANG_PHOTO_ENUM_742
+    (char*)LANG_PHOTO_ENUM_EV_STEP, (char*)LANG_PHOTO_ENUM_SHORT_EXP
 #ifdef CAM_EXT_TV_RANGE
-    , (char*)LANG_PHOTO_ENUM_743
+    , (char*)LANG_PHOTO_ENUM_LONG_EXP
 #endif
 };
 
@@ -1303,7 +1303,7 @@ const char* gui_subj_dist_override_value_enum(int change, __attribute__ ((unused
 
 const char* gui_subj_dist_override_koef_enum(int change, __attribute__ ((unused))int arg)
 {
-    static const char* modes[] = { (char*)LANG_PHOTO_ENUM_715, (char*)LANG_PHOTO_ENUM_716, "Inf" };
+    static const char* modes[] = { (char*)LANG_PHOTO_ENUM_NO, (char*)LANG_PHOTO_ENUM_YES, "Inf" };
     return gui_change_simple_enum(&conf.subj_dist_override_koef,change,modes,sizeof(modes)/sizeof(modes[0]));
 }
 
@@ -1399,13 +1399,13 @@ const char* gui_hhmss_enum(int change, int arg)
     return buf;
 }
 
-static const char* gui_override_disable_modes[] =           { (char*)LANG_PHOTO_ENUM_715, (char*)LANG_PHOTO_ENUM_716 };
+static const char* gui_override_disable_modes[] =           { (char*)LANG_PHOTO_ENUM_NO, (char*)LANG_PHOTO_ENUM_YES };
 #if CAM_HAS_ND_FILTER
 static const char* gui_nd_filter_state_modes[] =            { "Off", "In", "Out" };
 #endif
 static const char* gui_fast_ev_step_modes[] =               { "1/6 Ev","1/3 Ev","1/2 Ev", "2/3 Ev","5/6 Ev","1 Ev","1 1/6Ev","1 1/3Ev","1 1/2Ev", "1 2/3Ev","1 5/6Ev","2 Ev","2 1/6Ev","2 1/3Ev","2 1/2Ev", "2 2/3Ev","2 5/6Ev","3 Ev","3 1/6Ev","3 1/3Ev","3 1/2Ev", "3 2/3Ev","3 5/6Ev","4 Ev"};
 #if CAM_QUALITY_OVERRIDE
-const char* gui_fast_image_quality_modes[] =         { (char*)LANG_PHOTO_ENUM_718, (char*)LANG_PHOTO_ENUM_719, (char*)LANG_PHOTO_ENUM_720, (char*)LANG_PHOTO_ENUM_712 };
+const char* gui_fast_image_quality_modes[] =         { (char*)LANG_PHOTO_ENUM_SUPERFINE, (char*)LANG_PHOTO_ENUM_FINE, (char*)LANG_PHOTO_ENUM_NORMAL, (char*)LANG_PHOTO_ENUM_OFF };
 #endif
 
 #ifdef CAM_HOTSHOE_OVERRIDE
@@ -1485,7 +1485,7 @@ static CMenuItem sd_override_items[2] = {
     MENU_ITEM   (0, 0,   MENUITEM_ENUM,                                     gui_subj_dist_override_koef_enum,   0 ),
 };
 
-static const char* gui_raw_nr_modes[] =                     { (char*)LANG_PHOTO_ENUM_714, (char*)LANG_PHOTO_ENUM_712, (char*)LANG_PHOTO_ENUM_713};
+static const char* gui_raw_nr_modes[] =                     { (char*)LANG_PHOTO_ENUM_AUTO, (char*)LANG_PHOTO_ENUM_OFF, (char*)LANG_PHOTO_ENUM_ON};
 
 static CMenuItem operation_submenu_items[] = {
     MENU_ENUM2  (0x5f,LANG_MENU_OVERRIDE_DISABLE,           &conf.override_disable, gui_override_disable_modes ),
@@ -1769,7 +1769,7 @@ static const char* gui_raw_ev_ettr_enum(int change, int arg)
 
 static const char* gui_raw_ev_enable_enum(int change, __attribute__ ((unused))int arg)
 {
-    static const char* modes[]={ (char*)LANG_PHOTO_ENUM_721, "ALT", (char*)LANG_PHOTO_ENUM_729, (char*)LANG_PHOTO_ENUM_730 };
+    static const char* modes[]={ (char*)LANG_PHOTO_ENUM_NEVER, "ALT", (char*)LANG_PHOTO_ENUM_PLAY, (char*)LANG_PHOTO_ENUM_BOTH };
 
     gui_enum_value_change(&conf.raw_ev_histo_enable,change,sizeof(modes)/sizeof(modes[0]));
 
@@ -1800,9 +1800,9 @@ static CMenu raw_ev_histo_submenu = {0x25,LANG_MENU_RAW_EV_HISTO_TITLE, raw_ev_h
 
 //-------------------------------------------------------------------
 
-static const char* gui_histo_show_modes[] = { (char*)LANG_PHOTO_ENUM_721, (char*)LANG_PHOTO_ENUM_722, (char*)LANG_PHOTO_ENUM_723, (char*)LANG_PHOTO_ENUM_724 };
-static const char* gui_histo_view_modes[] = { "RGB", "Y", "RGB Y",  "R G B", "RGB all", "Y all", (char*)LANG_PHOTO_ENUM_725, (char*)LANG_PHOTO_ENUM_726};
-static const char* gui_histo_transform_modes[] = { (char*)LANG_PHOTO_ENUM_727, (char*)LANG_PHOTO_ENUM_728 };
+static const char* gui_histo_show_modes[] = { (char*)LANG_PHOTO_ENUM_NEVER, (char*)LANG_PHOTO_ENUM_ALWAYS, (char*)LANG_PHOTO_ENUM_REC, (char*)LANG_PHOTO_ENUM_HALF_PRESS };
+static const char* gui_histo_view_modes[] = { "RGB", "Y", "RGB Y",  "R G B", "RGB all", "Y all", (char*)LANG_PHOTO_ENUM_BLEND, (char*)LANG_PHOTO_ENUM_BLEND_Y};
+static const char* gui_histo_transform_modes[] = { (char*)LANG_PHOTO_ENUM_LINEAR, (char*)LANG_PHOTO_ENUM_LOG };
 
 static CMenuItem histo_submenu_items[] = {
     MENU_ENUM2(0x5f,LANG_MENU_HISTO_SHOW,             &conf.show_histo,     gui_histo_show_modes ),
@@ -1880,7 +1880,7 @@ static const char* gui_dng_version(int change, __attribute__ ((unused))int arg)
     return modes[conf.dng_version];
 }
 
-static const char* gui_dng_crop_size_modes[] = { "JPEG", (char*)LANG_PHOTO_ENUM_731, (char*)LANG_PHOTO_ENUM_732 };
+static const char* gui_dng_crop_size_modes[] = { "JPEG", (char*)LANG_PHOTO_ENUM_ACTIVE, (char*)LANG_PHOTO_ENUM_FULL };
 
 static void gui_menuproc_badpixel_create(__attribute__ ((unused))int arg)
 {
@@ -1949,11 +1949,11 @@ void cb_zebra_restore_osd()
         conf.zebra_restore_screen = 1;
 }
 
-static const char* gui_zebra_mode_modes[] = { (char*)LANG_PHOTO_ENUM_733, (char*)LANG_PHOTO_ENUM_734, (char*)LANG_PHOTO_ENUM_735, (char*)LANG_PHOTO_ENUM_736, (char*)LANG_PHOTO_ENUM_737, (char*)LANG_PHOTO_ENUM_738 };
+static const char* gui_zebra_mode_modes[] = { (char*)LANG_PHOTO_ENUM_BLINK1, (char*)LANG_PHOTO_ENUM_BLINK2, (char*)LANG_PHOTO_ENUM_BLINK3, (char*)LANG_PHOTO_ENUM_SOLID, (char*)LANG_PHOTO_ENUM_ZEBRA1, (char*)LANG_PHOTO_ENUM_ZEBRA2 };
 #ifndef CAM_DRAW_YUV
-static const char* gui_zebra_draw_osd_modes[] = { (char*)LANG_PHOTO_ENUM_739, (char*)LANG_PHOTO_ENUM_740, "OSD" };
+static const char* gui_zebra_draw_osd_modes[] = { (char*)LANG_PHOTO_ENUM_NOTHING, (char*)LANG_PHOTO_ENUM_HISTO, "OSD" };
 #endif
-static const char* gui_zebra_draw_modes[] = { (char*)LANG_PHOTO_ENUM_721, (char*)LANG_PHOTO_ENUM_724, (char*)LANG_PHOTO_ENUM_723, (char*)LANG_PHOTO_ENUM_722 };
+static const char* gui_zebra_draw_modes[] = { (char*)LANG_PHOTO_ENUM_NEVER, (char*)LANG_PHOTO_ENUM_HALF_PRESS, (char*)LANG_PHOTO_ENUM_REC, (char*)LANG_PHOTO_ENUM_ALWAYS };
 
 static CMenuItem zebra_submenu_items[] = {
     MENU_ENUM2(0x5f,LANG_MENU_ZEBRA_DRAW,             &conf.zebra_draw, gui_zebra_draw_modes ),
@@ -2230,7 +2230,7 @@ int gui_photo_module_available(__attribute__((unused)) const char *name) { retur
 
 const char* gui_on_off_enum(int change, int *conf_val)
 {
-    static const char* modes[]={ (char*)LANG_PHOTO_ENUM_712, (char*)LANG_PHOTO_ENUM_713};
+    static const char* modes[]={ (char*)LANG_PHOTO_ENUM_OFF, (char*)LANG_PHOTO_ENUM_ON};
     return gui_change_simple_enum(conf_val,change,modes,sizeof(modes)/sizeof(modes[0]));
 }
 

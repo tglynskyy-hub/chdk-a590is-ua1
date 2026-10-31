@@ -45,6 +45,8 @@ def validate(english, ukrainian):
         # The % le substring otherwise resembles a floating-point specifier.
         if key != 509:
             assert formats(english[key]) == formats(value), 'Format contract ID ' + str(key)
+            if formats(english[key]):
+                assert '%' not in FMT.sub('', value), 'Malformed printf ID ' + str(key)
         assert max(map(len, value.split('\\n'))) <= 35, 'Width ID ' + str(key)
         assert len(value.split('\\n')) <= 8, 'Message height ID ' + str(key)
     size = sum(len(v.encode('cp1251')) + 1 for v in ukrainian.values())
@@ -54,6 +56,14 @@ def validate(english, ukrainian):
     # gui_menu.c allocates seven built-in glyphs to enum values.
     for key in range(712, 744):
         assert len(ukrainian[key]) <= 7, 'Enum width ID ' + str(key)
+    ids = dict((name, int(n)) for name, n in re.findall(r'^#define (LANG_\w+)\s+(\d+)',
+                (ROOT / 'core/gui_lang.h').read_text(), re.M))
+    for line in (ROOT / 'core/gui_photo.inc').read_text().splitlines():
+        m = re.search(r'MENU_(ITEM|ENUM2)\([^,]+,(LANG_\w+),\s*([^,]+)', line)
+        if m:
+            # 340px menu, 16px symbol plus spacing; reserve both state/value fields.
+            limit = 22 if 'STATE_VAL_PAIR' in m[3] else (27 if m[1] == 'ENUM2' else 35)
+            assert len(ukrainian[ids[m[2]]]) <= limit, 'Menu label width ' + m[2]
     # Actual GUI build-info/memory sprintf consumers use a 256-byte buffer.
     build = ukrainian[107].replace('\\n', '\n') % ('1.7.0', 'r6346', '6346', 'Dec 29 2025', '09:54:14', 'a590', '101b', '8.3.1')
     memory = ukrainian[109].replace('\\n', '\n') % (2147483647, 2147483647, 0xffffffff)
@@ -91,7 +101,9 @@ def main():
             raise AssertionError('Accepted ' + label)
     for label, change in [('missing', lambda d: d.pop(1)), ('type', lambda d: d.update({107: '%d'})),
                           ('count', lambda d: d.update({109: '%d %X'})), ('write', lambda d: d.update({109: '%n'})),
-                          ('width', lambda d: d.update({1: 'a' * 36})), ('UTF8', lambda d: d.update(parse(raw.decode('cp1251').encode('utf-8'))))]:
+                          ('width', lambda d: d.update({1: 'a' * 36})),
+                          ('bad printf', lambda d: d.update({109: ukrainian[109] + '%q'})),
+                          ('UTF8', lambda d: d.update(parse(raw.decode('cp1251').encode('utf-8'))))]:
         try:
             bad = dict(ukrainian)
             change(bad)
@@ -103,7 +115,7 @@ def main():
     assert formats('%*.*ld %% %s') == ['int:*', 'int:*', 'ld', 's']
     (ROOT / 'baseline-output').mkdir(exist_ok=True)
     (ROOT / 'baseline-output/locale-tests.json').write_text(json.dumps(report, indent=2) + '\n')
-    print('PASS: localization, encoding, glyphs, formats, bounds and 10 negative fixtures')
+    print('PASS: localization, encoding, glyphs, formats, bounds and 11 negative fixtures')
     print(json.dumps(report, indent=2))
 
 
