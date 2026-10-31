@@ -15,6 +15,7 @@
 
 #include "modules.h"
 #include "module_def.h"
+#include "photo_ui_policy.h"
 
 //-------------------------------------------------------------------
 Conf conf;
@@ -342,6 +343,7 @@ static ConfInfo osd_conf_info[] = {
     CONF_INFO( 297, conf.enable_raw_shortcut,                      CONF_DEF_VALUE, i:0),
 
     CONF_INFO( 298, conf.osd_platformid,                           CONF_DEF_VALUE, i:PLATFORMID),
+    CONF_INFO( 299, conf.photography_ui_mode,                      CONF_DEF_VALUE, i:PHOTO_UI_CLASSIC),
 
     {0}
 };
@@ -350,6 +352,9 @@ void osd_conf_info_func(unsigned short id)
 {
     switch (id)
     {
+    case 299:
+        conf.photography_ui_mode = photo_ui_normalize(conf.photography_ui_mode);
+        break;
     case 6:
         update_draw_proc();
         break;
@@ -949,6 +954,10 @@ void conf_restore()
 {
     int i;
     int old_config_loaded = 0;
+#ifdef CAM_PHOTOGRAPHY_UI
+    // Do not replace language/UI preferences of an existing OSD configuration.
+    int fresh_osd = stat(confinfo_handlers[1].filename, 0) != 0;
+#endif
 
     // init some defaults values
     init_user_menu(USER_MENU_ITEMS);
@@ -970,6 +979,9 @@ void conf_restore()
 
     // clear any "clear on restart" values
     clear_values();
+#ifdef CAM_PHOTOGRAPHY_UI
+    gui_photo_init_defaults(fresh_osd && !old_config_loaded);
+#endif
 
 // Enable Lua native calls if builder wants them forced on
 #if defined(OPT_FORCE_LUA_CALL_NATIVE)

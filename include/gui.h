@@ -81,6 +81,8 @@ extern void gui_cancel_need_restore();
 
 extern gui_handler* gui_set_mode(gui_handler *mode);
 extern void gui_reset_alt_helper();
+extern void gui_photo_init_defaults(int fresh);
+extern int gui_photo_module_available(const char *name);
 
 extern void gui_enum_value_change(int *value, int change, int num_items);
 extern const char* gui_subj_dist_override_value_enum(int change, int arg);

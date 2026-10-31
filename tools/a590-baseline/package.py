@@ -10,8 +10,8 @@ from functools import lru_cache
 import audit_modules
 
 ROOT = Path(__file__).resolve().parents[2]
-NAME = 'CHDK-A590IS-101B-1.7.0-r6346-full.zip'
-IDENTITY = {'platform': 'a590', 'firmware': '101b', 'chdk': '1.7.0', 'svn': 6346}
+NAME = 'CHDK-A590IS-101B-1.7.0-r6346-enhanced-full.zip'
+IDENTITY = {'platform': 'a590', 'firmware': '101b', 'chdk': '1.7.0', 'svn': 6346, 'variant': 'enhanced-task004', 'conf_abi': [3, 7]}
 
 
 @lru_cache(maxsize=1)
@@ -56,7 +56,7 @@ def read_zip(path):
 
 def validate_payload(files, profile='full'):
     excluded = excluded_paths(profile)
-    baseline = json.loads((ROOT / 'docs/evidence/baseline-manifest.json').read_text())
+    baseline = json.loads((ROOT / 'baseline-output/manifest.json').read_text())
     expected_modules = set()
     for item in baseline:
         if item['path'] == 'main.elf':
@@ -69,7 +69,7 @@ def validate_payload(files, profile='full'):
             expected_modules.add(name)
         require(name in files, 'Missing baseline file: ' + name)
         require(len(files[name]) == item['bytes'] and sha(files[name]) == item['sha256'],
-                'Task 001 mismatch: ' + name)
+                'Current reproducible build mismatch: ' + name)
     require(len(expected_modules) == (38 if profile == 'full' else 30), 'Wrong module count')
     actual_modules = {n for n in files if n.startswith('CHDK/MODULES/')}
     require(actual_modules == expected_modules, 'Unexpected/missing modules')
@@ -92,6 +92,8 @@ def validate_payload(files, profile='full'):
         if name in excluded:
             continue
         runtime[name] = path.read_bytes()
+    if profile == 'photography':
+        runtime['CHDK/DATA/PHOTO_UI.TXT'] = b'Enhanced Photography UI: fresh configuration defaults only.\n'
     require({n for n in files if n.startswith('CHDK/')} == set(runtime),
             'Runtime tree membership differs from upstream output')
     for name, content in runtime.items():
@@ -156,11 +158,14 @@ def build(upstream, output, source_commit, profile='full'):
         'INSTALL/SD_INSTALL_WINDOWS.md': 'docs/SD_INSTALL_WINDOWS.md',
         'INSTALL/SD_ROLLBACK.md': 'docs/SD_ROLLBACK.md',
         'INSTALL/DISTRIBUTION_PROFILES.md': 'docs/DISTRIBUTION_PROFILES.md',
+        'INSTALL/PHOTOGRAPHY_UI.md': 'docs/PHOTOGRAPHY_UI.md',
     }.items():
         files[target] = (ROOT / source).read_bytes()
     for name in excluded_paths(profile):
         require(name in files, 'Expected exclusion absent upstream: ' + name)
         del files[name]
+    if profile == 'photography':
+        files['CHDK/DATA/PHOTO_UI.TXT'] = b'Enhanced Photography UI: fresh configuration defaults only.\n'
     files['MODULE-INVENTORY.json'] = (json.dumps(module_inventory(), indent=2, sort_keys=True) + '\n').encode()
     manifest = {
         'identity': IDENTITY, 'profile': profile, 'hardware_tested': False,

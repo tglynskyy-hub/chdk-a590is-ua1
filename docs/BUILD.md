@@ -1,5 +1,10 @@
 # Відтворюване складання A590 IS 1.01B
 
+> **Оновлення Task 004.** Task 004 Enhanced використовує те саме середовище GCC 8.3.1, але змінений
+> UI-код. ZIP мають `enhanced` у назві, Conf ABI 3.7, а `profile-comparison.json`
+> показує дельти секцій від Task 001. Історичний baseline нижче не замінено.
+> `test_locale.py` і `test_photo_ui.py` виконуються перед ARM-збіркою.
+
 ## Обсяг і середовище
 
 Baseline — CHDK 1.7.0 r6346 із незміненим camera/core/module source.

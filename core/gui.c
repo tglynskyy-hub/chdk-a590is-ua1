@@ -25,6 +25,13 @@
 #include "clock.h"
 #include "dirent.h"
 #include "raw_ev_histo.h"
+#include "script.h"
+#include "photo_ui_policy.h"
+
+#ifdef CAM_PHOTOGRAPHY_UI
+static void gui_photo_switch(int mode);
+static void gui_photo_language(int ukrainian);
+#endif
 
 // splash screen time
 #if defined(OPT_EXPIRE_TEST)
@@ -106,7 +113,7 @@ static const char* gui_change_simple_enum(int* value, int change, const char** i
 
 //-------------------------------------------------------------------
 
-const char* gui_bracket_values_modes[] = { "Off", "1/3 Ev","2/3 Ev", "1 Ev", "1 1/3Ev", "1 2/3Ev", "2 Ev", "2 1/3Ev", "2 2/3Ev", "3 Ev", "3 1/3Ev", "3 2/3Ev", "4 Ev" };
+const char* gui_bracket_values_modes[] = { (char*)LANG_PHOTO_ENUM_OFF, "1/3 Ev","2/3 Ev", "1 Ev", "1 1/3Ev", "1 2/3Ev", "2 Ev", "2 1/3Ev", "2 2/3Ev", "3 Ev", "3 1/3Ev", "3 2/3Ev", "4 Ev" };
 const char* gui_bracket_type_modes[] =   { "+/-", "-", "+", "-/+" };
 
 static CMenuItem sd_bracket[2] = {
@@ -214,12 +221,12 @@ static CMenu remote_submenu = {0x86,LANG_MENU_REMOTE_PARAM_TITLE, remote_submenu
 
 //-------------------------------------------------------------------
 
-static const char* gui_autoiso_shutter_modes[] = { "Auto", "1/2", "1/4", "1/6", "1/8", "1/15", "1/30", "1/60", "1/125", "1/250", "1/500", "1/1000", "1/2000" };
+static const char* gui_autoiso_shutter_modes[] = { (char*)LANG_PHOTO_ENUM_AUTO, "1/2", "1/4", "1/6", "1/8", "1/15", "1/30", "1/60", "1/125", "1/250", "1/500", "1/1000", "1/2000" };
 
-static const char* gui_autoiso2_shutter_modes[] = { "Off", "1", "1/2","1/4", "1/6", "1/8", "1/12", "1/15", "1/20", "1/25", "1/30",
+static const char* gui_autoiso2_shutter_modes[] = { (char*)LANG_PHOTO_ENUM_OFF, "1", "1/2","1/4", "1/6", "1/8", "1/12", "1/15", "1/20", "1/25", "1/30",
                                                     "1/40", "1/50", "1/60", "1/80", "1/100", "1/125", "1/160", "1/250", "1/500", "1/1000", "1/2000" };
 
-static const char* gui_overexp_ev_modes[] = { "Off", "-1/3 Ev", "-2/3 Ev", "-1 Ev", "-1 1/3Ev", "-1 2/3Ev", "-2 Ev" };
+static const char* gui_overexp_ev_modes[] = { (char*)LANG_PHOTO_ENUM_OFF, "-1/3 Ev", "-2/3 Ev", "-1 Ev", "-1 1/3Ev", "-1 2/3Ev", "-2 Ev" };
 
 static CMenuItem autoiso_submenu_items[] = {
     MENU_ITEM   (0x5c,LANG_MENU_AUTOISO_ENABLED,            MENUITEM_BOOL,                                      &conf.autoiso_enable,           0 ),
@@ -1254,9 +1261,9 @@ const char* tv_override_value_string()
 }
 
 static const char* gui_tv_enum_type[] = {
-    "Ev Step", "ShrtExp"
+    (char*)LANG_PHOTO_ENUM_EV_STEP, (char*)LANG_PHOTO_ENUM_SHORT_EXP
 #ifdef CAM_EXT_TV_RANGE
-    , "LongExp"
+    , (char*)LANG_PHOTO_ENUM_LONG_EXP
 #endif
 };
 
@@ -1296,7 +1303,7 @@ const char* gui_subj_dist_override_value_enum(int change, __attribute__ ((unused
 
 const char* gui_subj_dist_override_koef_enum(int change, __attribute__ ((unused))int arg)
 {
-    static const char* modes[] = { "Off", "On", "Inf" };
+    static const char* modes[] = { (char*)LANG_PHOTO_ENUM_NO, (char*)LANG_PHOTO_ENUM_YES, "Inf" };
     return gui_change_simple_enum(&conf.subj_dist_override_koef,change,modes,sizeof(modes)/sizeof(modes[0]));
 }
 
@@ -1392,13 +1399,13 @@ const char* gui_hhmss_enum(int change, int arg)
     return buf;
 }
 
-static const char* gui_override_disable_modes[] =           { "No", "Yes" };
+static const char* gui_override_disable_modes[] =           { (char*)LANG_PHOTO_ENUM_NO, (char*)LANG_PHOTO_ENUM_YES };
 #if CAM_HAS_ND_FILTER
 static const char* gui_nd_filter_state_modes[] =            { "Off", "In", "Out" };
 #endif
 static const char* gui_fast_ev_step_modes[] =               { "1/6 Ev","1/3 Ev","1/2 Ev", "2/3 Ev","5/6 Ev","1 Ev","1 1/6Ev","1 1/3Ev","1 1/2Ev", "1 2/3Ev","1 5/6Ev","2 Ev","2 1/6Ev","2 1/3Ev","2 1/2Ev", "2 2/3Ev","2 5/6Ev","3 Ev","3 1/6Ev","3 1/3Ev","3 1/2Ev", "3 2/3Ev","3 5/6Ev","4 Ev"};
 #if CAM_QUALITY_OVERRIDE
-const char* gui_fast_image_quality_modes[] =         { "Sup.Fine", "Fine", "Normal", "Off" };
+const char* gui_fast_image_quality_modes[] =         { (char*)LANG_PHOTO_ENUM_SUPERFINE, (char*)LANG_PHOTO_ENUM_FINE, (char*)LANG_PHOTO_ENUM_NORMAL, (char*)LANG_PHOTO_ENUM_OFF };
 #endif
 
 #ifdef CAM_HOTSHOE_OVERRIDE
@@ -1478,7 +1485,7 @@ static CMenuItem sd_override_items[2] = {
     MENU_ITEM   (0, 0,   MENUITEM_ENUM,                                     gui_subj_dist_override_koef_enum,   0 ),
 };
 
-static const char* gui_raw_nr_modes[] =                     { "Auto", "Off", "On"};
+static const char* gui_raw_nr_modes[] =                     { (char*)LANG_PHOTO_ENUM_AUTO, (char*)LANG_PHOTO_ENUM_OFF, (char*)LANG_PHOTO_ENUM_ON};
 
 static CMenuItem operation_submenu_items[] = {
     MENU_ENUM2  (0x5f,LANG_MENU_OVERRIDE_DISABLE,           &conf.override_disable, gui_override_disable_modes ),
@@ -1762,13 +1769,13 @@ static const char* gui_raw_ev_ettr_enum(int change, int arg)
 
 static const char* gui_raw_ev_enable_enum(int change, __attribute__ ((unused))int arg)
 {
-    static const char* modes[]={ "Don't", "ALT", "Play", "Both" };
+    static const char* modes[]={ (char*)LANG_PHOTO_ENUM_NEVER, "ALT", (char*)LANG_PHOTO_ENUM_PLAY, (char*)LANG_PHOTO_ENUM_BOTH };
 
     gui_enum_value_change(&conf.raw_ev_histo_enable,change,sizeof(modes)/sizeof(modes[0]));
 
     librawevhisto->load(conf.raw_ev_histo_enable);
 
-    return modes[conf.raw_ev_histo_enable];
+    return lang_str((int)modes[conf.raw_ev_histo_enable]);
 }
 
 static CMenuItem raw_ev_histo_submenu_items[] = {
@@ -1793,9 +1800,9 @@ static CMenu raw_ev_histo_submenu = {0x25,LANG_MENU_RAW_EV_HISTO_TITLE, raw_ev_h
 
 //-------------------------------------------------------------------
 
-static const char* gui_histo_show_modes[] = { "Don't", "Always", "Rec", "Shoot" };
-static const char* gui_histo_view_modes[] = { "RGB", "Y", "RGB Y",  "R G B", "RGB all", "Y all", "Blend", "Blend Y"};
-static const char* gui_histo_transform_modes[] = { "Linear", "Log" };
+static const char* gui_histo_show_modes[] = { (char*)LANG_PHOTO_ENUM_NEVER, (char*)LANG_PHOTO_ENUM_ALWAYS, (char*)LANG_PHOTO_ENUM_REC, (char*)LANG_PHOTO_ENUM_HALF_PRESS };
+static const char* gui_histo_view_modes[] = { "RGB", "Y", "RGB Y",  "R G B", "RGB all", "Y all", (char*)LANG_PHOTO_ENUM_BLEND, (char*)LANG_PHOTO_ENUM_BLEND_Y};
+static const char* gui_histo_transform_modes[] = { (char*)LANG_PHOTO_ENUM_LINEAR, (char*)LANG_PHOTO_ENUM_LOG };
 
 static CMenuItem histo_submenu_items[] = {
     MENU_ENUM2(0x5f,LANG_MENU_HISTO_SHOW,             &conf.show_histo,     gui_histo_show_modes ),
@@ -1873,7 +1880,7 @@ static const char* gui_dng_version(int change, __attribute__ ((unused))int arg)
     return modes[conf.dng_version];
 }
 
-static const char* gui_dng_crop_size_modes[] = { "JPEG", "Active", "Full" };
+static const char* gui_dng_crop_size_modes[] = { "JPEG", (char*)LANG_PHOTO_ENUM_ACTIVE, (char*)LANG_PHOTO_ENUM_FULL };
 
 static void gui_menuproc_badpixel_create(__attribute__ ((unused))int arg)
 {
@@ -1942,11 +1949,11 @@ void cb_zebra_restore_osd()
         conf.zebra_restore_screen = 1;
 }
 
-static const char* gui_zebra_mode_modes[] = { "Blink 1", "Blink 2", "Blink 3", "Solid", "Zebra 1", "Zebra 2" };
+static const char* gui_zebra_mode_modes[] = { (char*)LANG_PHOTO_ENUM_BLINK1, (char*)LANG_PHOTO_ENUM_BLINK2, (char*)LANG_PHOTO_ENUM_BLINK3, (char*)LANG_PHOTO_ENUM_SOLID, (char*)LANG_PHOTO_ENUM_ZEBRA1, (char*)LANG_PHOTO_ENUM_ZEBRA2 };
 #ifndef CAM_DRAW_YUV
-static const char* gui_zebra_draw_osd_modes[] = { "Nothing", "Histo", "OSD" };
+static const char* gui_zebra_draw_osd_modes[] = { (char*)LANG_PHOTO_ENUM_NOTHING, (char*)LANG_PHOTO_ENUM_HISTO, "OSD" };
 #endif
-static const char* gui_zebra_draw_modes[] = { "Don't", "Shoot", "Rec", "Always" };
+static const char* gui_zebra_draw_modes[] = { (char*)LANG_PHOTO_ENUM_NEVER, (char*)LANG_PHOTO_ENUM_HALF_PRESS, (char*)LANG_PHOTO_ENUM_REC, (char*)LANG_PHOTO_ENUM_ALWAYS };
 
 static CMenuItem zebra_submenu_items[] = {
     MENU_ENUM2(0x5f,LANG_MENU_ZEBRA_DRAW,             &conf.zebra_draw, gui_zebra_draw_modes ),
@@ -2037,6 +2044,10 @@ static void gui_menuproc_reset_files(__attribute__ ((unused))int arg)
 static const char* gui_text_box_charmap[] = { "Default", "German", "Russian" };
 
 static CMenuItem menu_font_submenu_items[] = {
+#ifdef CAM_PHOTOGRAPHY_UI
+    MENU_ITEM(0x35,LANG_PHOTO_UKRAINIAN, MENUITEM_PROC, gui_photo_language, 1),
+    MENU_ITEM(0x35,LANG_PHOTO_ENGLISH, MENUITEM_PROC, gui_photo_language, 0),
+#endif
     MENU_ITEM(0x35,LANG_MENU_VIS_LANG,                MENUITEM_PROC,      gui_draw_load_lang, 0 ),
     MENU_ITEM(0x5f,LANG_MENU_VIS_OSD_FONT,            MENUITEM_ENUM,      gui_font_enum, &conf.font_cp ),
     MENU_ITEM(0x35,LANG_MENU_VIS_MENU_FONT,           MENUITEM_PROC,      gui_draw_load_menu_rbf, 0 ),
@@ -2189,6 +2200,9 @@ CMenu chdk_settings_menu = {0x20,LANG_MENU_CHDK_SETTINGS, chdk_settings_menu_ite
 extern CMenu script_submenu;
 
 static CMenuItem root_menu_items[] = {
+#ifdef CAM_PHOTOGRAPHY_UI
+    MENU_ITEM(0x21,LANG_PHOTO_SWITCH, MENUITEM_PROC, gui_photo_switch, PHOTO_UI_PHOTOGRAPHY),
+#endif
     MENU_ITEM   (0x21,LANG_MENU_OPERATION_PARAM,            MENUITEM_SUBMENU,   &operation_submenu, 0 ),
     MENU_ITEM   (0x23,LANG_MENU_VIDEO_PARAM,                MENUITEM_SUBMENU,   &video_submenu,     0 ),
     MENU_ITEM   (0x24,LANG_MENU_MAIN_RAW_PARAM,             MENUITEM_SUBMENU,   &raw_submenu,       0 ),
@@ -2204,11 +2218,19 @@ static CMenuItem root_menu_items[] = {
 
 CMenu root_menu = {0x20,LANG_MENU_MAIN_TITLE, root_menu_items };
 
+#ifdef CAM_PHOTOGRAPHY_UI
+// Shares existing static settings/callbacks rather than duplicating the menu engine.
+#include "gui_photo.inc"
+#else
+CMenu* gui_get_root_menu() { return &root_menu; }
+int gui_photo_module_available(__attribute__((unused)) const char *name) { return 1; }
+#endif
+
 //-------------------------------------------------------------------
 
 const char* gui_on_off_enum(int change, int *conf_val)
 {
-    static const char* modes[]={ "Off", "On"};
+    static const char* modes[]={ (char*)LANG_PHOTO_ENUM_OFF, (char*)LANG_PHOTO_ENUM_ON};
     return gui_change_simple_enum(conf_val,change,modes,sizeof(modes)/sizeof(modes[0]));
 }
 
@@ -2484,7 +2506,7 @@ static int shortcut_text(int x, int y, int button, int func_str, const char *sta
     {
         sprintf(buf,"%-5s %20s",gui_shortcut_text(button),lang_str(func_str));
         buf[26] = 0;
-        sprintf(buf+strlen(buf)," [%6s",state);
+        sprintf(buf+strlen(buf)," [%6s",lang_str((int)state));
         buf[34] = 0;
         strcat(buf,"]");
     }
@@ -2901,7 +2923,7 @@ void gui_chdk_kbd_process_menu_btn()
          (!conf.user_menu_as_root && camera_info.state.is_shutter_half_press)))
         gui_menu_init(&user_submenu);
     else
-        gui_menu_init(&root_menu);
+        gui_menu_init(gui_get_root_menu());
 
     gui_default_kbd_process_menu_btn();
 }

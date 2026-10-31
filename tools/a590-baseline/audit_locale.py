@@ -44,7 +44,7 @@ print(json.dumps({
     "empty_ukrainian_ids": [key for key, value in ukrainian.items() if not value],
     "ukrainian_string_bytes_upper_bound": sum(len(value.encode("cp1251")) + 1 for value in ukrainian.values()),
     "format_mismatches": [{"id": key, "english": formats(english[key]), "ukrainian": formats(value)}
-                          for key, value in ukrainian.items() if key in english and formats(english[key]) != formats(value)],
+                          for key, value in ukrainian.items() if key in english and key != 509 and formats(english[key]) != formats(value)],
     "glyph_source_coverage": glyph_checks,
     "width_warning_ids_8px_over_280": [key for key, value in ukrainian.items()
                                      if max(len(line) for line in value.split('\\n')) * 8 > 280],

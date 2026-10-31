@@ -58,6 +58,7 @@
     #define PARAM_CAMERA_NAME               4       // parameter number for GetParameterData
 
     #define CAM_MULTIPART                   1
+    #define CAM_PHOTOGRAPHY_UI              1   // A590 Enhanced menu, no camera hooks
 
     #undef  CAMERA_MIN_DIST
     #define CAMERA_MIN_DIST                 51     // Override min subject distance

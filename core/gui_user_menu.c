@@ -139,7 +139,7 @@ static void rinit()
     // otherwise it leaves remnants of the user menu above and below
     // the main menu.
     gui_set_need_restore();
-    gui_menu_init(&root_menu);
+    gui_menu_init(gui_get_root_menu());
 }
 
 //-------------------------------------------------------------------

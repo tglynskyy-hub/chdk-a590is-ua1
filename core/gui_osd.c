@@ -288,9 +288,9 @@ void gui_osd_draw_state(int is_osd_edit)
           if (is_tv_bracketing_enabled || is_av_bracketing_enabled || is_iso_bracketing_enabled || is_sd_bracketing_enabled)
             gui_print_osd_state_string_chr("BRACKET:", gui_bracket_type_modes[conf.bracket_type]);
           if (is_tv_bracketing_enabled)
-            gui_print_osd_state_string_chr("TV:", gui_bracket_values_modes[conf.tv_bracket_value]);
+            gui_print_osd_state_string_chr("TV:", lang_str((int)gui_bracket_values_modes[conf.tv_bracket_value]));
           else if (is_av_bracketing_enabled)
-            gui_print_osd_state_string_chr("AV:", gui_bracket_values_modes[conf.av_bracket_value]);
+            gui_print_osd_state_string_chr("AV:", lang_str((int)gui_bracket_values_modes[conf.av_bracket_value]));
           else if (is_iso_bracketing_enabled)
             gui_print_osd_state_string_int("ISO:", conf.iso_bracket_value);
           else if (is_sd_bracketing_enabled)
@@ -312,7 +312,7 @@ void gui_osd_draw_state(int is_osd_edit)
 #ifdef CAM_QUALITY_OVERRIDE
         // displaying the overriding picture quality if active
         if ((conf.fast_image_quality!=3) || is_osd_edit) {
-            gui_print_osd_state_string_chr("QUALI:", gui_fast_image_quality_modes[conf.fast_image_quality]);
+            gui_print_osd_state_string_chr("QUALI:", lang_str((int)gui_fast_image_quality_modes[conf.fast_image_quality]));
         }
 #endif
 

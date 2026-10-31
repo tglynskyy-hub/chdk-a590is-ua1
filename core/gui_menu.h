@@ -112,6 +112,7 @@ extern gui_handler menuGuiHandler;
 
 //-------------------------------------------------------------------
 extern  CMenu   root_menu;      // defined in gui.c
+extern CMenu* gui_get_root_menu();
 
 //-------------------------------------------------------------------
 #endif

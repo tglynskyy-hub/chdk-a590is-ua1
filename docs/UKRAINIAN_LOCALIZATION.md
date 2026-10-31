@@ -1,5 +1,11 @@
 # Українська локалізація — фундамент і план
 
+> **Оновлення Task 004.** Task 004 реалізовано: 728/728 числових ID (672 попередні + 56 нових),
+> 237 пропусків заповнено, 107/109 виправлено, CP1251 збережено.
+> `test_locale.py` перевіряє форматні контракти, гліфи, кодування, дублікати,
+> буфери, 7-символьні enum та ширину пунктів Photography. Нижче — історичний
+> аудит Task 003; актуальні правила й перевірки: [Photography UI](PHOTOGRAPHY_UI.md).
+
 Повторний source audit r6346: **672 English IDs, 435 Ukrainian IDs, 237 відсутніх**.
 `python tools/a590-baseline/audit_locale.py` генерує missing/extra/duplicates,
 порожні/English-identical IDs, printf signatures, приблизні width warnings,

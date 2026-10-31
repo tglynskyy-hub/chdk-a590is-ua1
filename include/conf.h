@@ -76,7 +76,7 @@ typedef struct {
 // Don't make any of the entries conditionally compiled in - this will change the offsets between cameras causing problems with
 // making the modules camera/platform independent
 
-#define CONF_VERSION            {3,6}       // Version for Conf structure
+#define CONF_VERSION            {3,7}       // Appended photography_ui_mode; offsets preserved
 
 typedef struct
 {
@@ -479,6 +479,8 @@ typedef struct
     int raw_ev_histo_save_log;
     int raw_ev_histo_ettr_pct;
     int raw_ev_histo_save_for_image;
+
+    int photography_ui_mode; // 0 Classic (recovery/default), 1 Photography; OSD ID 299
 
 } Conf;
 

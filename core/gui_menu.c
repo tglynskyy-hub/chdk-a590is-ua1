@@ -11,9 +11,11 @@
 #include "ctype.h"
 
 #include "gui_palette.h"
+#include "module_load.h"
+#include "gui_mbox.h"
 
 //-------------------------------------------------------------------
-#define MENUSTACK_MAXDEPTH  4
+#define MENUSTACK_MAXDEPTH  6
 
 //-------------------------------------------------------------------
 typedef struct {
@@ -408,6 +410,9 @@ static int isText(int n)
 // Open a sub-menu
 void gui_activate_sub_menu(CMenu *sub_menu)
 {
+    // Check before writing: Photography adds two levels above existing menus.
+    if (gui_menu_stack_ptr >= MENUSTACK_MAXDEPTH)
+        return;
     // push current menu on stack
     gui_menu_stack[gui_menu_stack_ptr].menu = curr_menu;
     gui_menu_stack[gui_menu_stack_ptr].curpos = gui_menu_curr_item;
@@ -443,6 +448,14 @@ static void select_proc()
 {
     if (curr_menu->menu[gui_menu_curr_item].menu_function)
     {
+        // Old user-menu shortcuts may refer to games omitted by Photography.
+        if (curr_menu->menu[gui_menu_curr_item].menu_function == (menu_proc)module_run &&
+            !gui_photo_module_available((const char*)curr_menu->menu[gui_menu_curr_item].arg))
+        {
+            gui_mbox_init(LANG_ERROR, LANG_PHOTO_MODULE_MISSING,
+                          MBOX_BTN_OK|MBOX_TEXT_CENTER, 0);
+            return;
+        }
         curr_menu->menu[gui_menu_curr_item].menu_function(curr_menu->menu[gui_menu_curr_item].arg);
         gui_menu_redraw=2;
     }
@@ -1069,7 +1082,7 @@ static void gui_menu_kbd_process_menu_btn()
     if ( gui_user_menu_flag )
     {
         gui_set_mode(&menuGuiHandler);
-        gui_menu_init(&root_menu);
+        gui_menu_init(gui_get_root_menu());
     }
     else
         gui_set_mode(&altGuiHandler);
