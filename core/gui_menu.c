@@ -223,11 +223,12 @@ void gui_menu_init(CMenu *menu_ptr) {
     len_enum = rbf_str_width("WUBfS3a");
     len_space = rbf_char_width(' ');
     len_br = rbf_char_width('[') + rbf_char_width(']');
-    ui_profile_end(UI_PROF_INIT, profile_start);
     cl_rect = rbf_font_height() - 4;
     int_incr = 1;
 
     gui_menu_redraw=2;
+    ui_profile_end(UI_PROF_INIT, profile_start);
+    ui_profile_menu(menu_ptr);
 }
 
 //-------------------------------------------------------------------

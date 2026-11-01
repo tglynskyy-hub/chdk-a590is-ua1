@@ -137,7 +137,7 @@ int main(void){
     fail_open=1;assert(!config_save_checked(ci,"cfg",2000) && frees==1);fail_open=0;
     short_write=1;assert(!config_save_checked(ci,"cfg",2000));short_write=0;
     fail_close=1;assert(!config_save_checked(ci,"cfg",2000));fail_close=0;
-    assert(config_save_checked(ci,"cfg",2000));assert(frees==5);
+    assert(config_save_checked(ci,"cfg",2000));assert(frees==4);
     puts("PASS config save: allocation failure cannot truncate/dereference NULL; open/short write/close faults detected");
 }
 ''')

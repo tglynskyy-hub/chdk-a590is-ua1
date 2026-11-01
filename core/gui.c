@@ -2227,6 +2227,16 @@ CMenu* gui_get_root_menu() { return &root_menu; }
 int gui_photo_module_available(__attribute__((unused)) const char *name) { return 1; }
 #endif
 
+#ifdef OPT_UI_PROFILE
+void ui_profile_menu(const void *menu)
+{
+    if (menu == &root_menu) ui_profile_root(0);
+#ifdef CAM_PHOTOGRAPHY_UI
+    if (menu == &photo_root_menu) ui_profile_root(1);
+#endif
+}
+#endif
+
 //-------------------------------------------------------------------
 
 const char* gui_on_off_enum(int change, int *conf_val)

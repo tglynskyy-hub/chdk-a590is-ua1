@@ -28,7 +28,7 @@ CI робить normal і diagnostic (`UI_PROFILE=1` → `OPT_UI_PROFILE=1`), у
 Full 38 FLT і Photography 30 FLT. Normal не має таймерів, CSV writer чи статичних
 масивів профайлера: host test перевіряє порожній ui_profile.o. У normal залишаються
 текстові ID для сумісного комплекту мов. Розміри ELF/BSS/ZIP — у CI evidence та
-profile-tests.json; diagnostic не використовувати як вимірювання normal overhead.
+profile-comparison.json; diagnostic не використовувати як вимірювання normal overhead.
 Жодних EXMEM/ARAM, нових task, polling file writes, compiler/scheduler tuning.
 
 ## Протокол на камері
@@ -37,7 +37,7 @@ profile-tests.json; diagnostic не використовувати як вимі
    комплект одного commit; не змішувати DISKBOOT і FLT. Записати SHA пакета,
    карту, режим REC/PLAY, RAW/OSD налаштування, заряд. Перезапустити.
 2. Без зйомки відкрити Photography, Classic, повернутися. Перші root checkpoints
-   знімаються до init меню, тому включають стан входу, а не завершене малювання.
+   знімаються після init root меню, до завершеного малювання.
    Startup checkpoint — після gui_init, не після всього warm-up Canon.
 3. Для latency окремий свіжий запуск: відкрити меню, зробити 30 одиночних рухів
    з паузами, закрити/відкрити ALT і меню ще 5 разів. Зовнішнє відео кнопки+LCD
@@ -71,3 +71,7 @@ CI зберігає stdout у performance-tests.txt, обидві clean builds �
 SD write throughput, RAW hot loops, compiler flag A/B з GCC8.3.1 reference,
 selected assembly тільки після bit-exact тестів і hardware gate. NEON/VFP немає
 в прийнятій моделі цілі; EXMEM/ARAM потребують окремо перевіреної карти пам'яті.
+
+Для read-only аналізу CSV: `python3 tools/a590-baseline/analyze_ui_profile.py <каталог>`;
+виводить mean/max events, nearest-rank p50/p95 response та memory rows, без
+автоматичного висновку про витік. Оригінали не змінюються.

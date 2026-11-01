@@ -10,15 +10,17 @@ void ui_profile_input(void);
 void ui_profile_present(void);
 void ui_profile_memory(int tag);
 void ui_profile_root(int mode);
+void ui_profile_menu(const void *menu);
 void ui_profile_switch(void);
 int ui_profile_export(void);
 #else
 #define ui_profile_begin() 0U
-#define ui_profile_end(event,start) ((void)0)
+#define ui_profile_end(event,start) ((void)(start))
 #define ui_profile_input() ((void)0)
 #define ui_profile_present() ((void)0)
 #define ui_profile_memory(tag) ((void)0)
 #define ui_profile_root(mode) ((void)0)
+#define ui_profile_menu(menu) ((void)0)
 #define ui_profile_switch() ((void)0)
 #endif
 #endif

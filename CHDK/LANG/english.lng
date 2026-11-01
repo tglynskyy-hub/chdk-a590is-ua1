@@ -889,5 +889,5 @@
 746 "After Lua unloaded"
 747 "Comparable idle"
 748 "Export diagnostics CSV"
-749 "Saved UISTAT.CSV / UIMEM.CSV\nin CHDK/DATA."
+749 "Saved UISTAT / UIMEM / UIDELAY.CSV\nin CHDK/DATA."
 750 "Export failed. Check SD space."

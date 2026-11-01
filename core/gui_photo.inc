@@ -6,7 +6,6 @@ static CMenu photo_root_menu;
 
 CMenu* gui_get_root_menu()
 {
-    ui_profile_root(conf.photography_ui_mode);
     return photo_ui_normalize(conf.photography_ui_mode) == PHOTO_UI_PHOTOGRAPHY
         ? &photo_root_menu : &root_menu;
 }
