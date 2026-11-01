@@ -1,3 +1,4 @@
+#include "ui_profile.h"
 #include "platform.h"
 #include "core.h"
 #include "conf.h"
@@ -163,6 +164,7 @@ void core_spytask()
 
     extern void gui_init();
     gui_init();
+    ui_profile_memory(0); // diagnostic startup checkpoint, before module/script warm-up
 
 #if CAM_CONSOLE_LOG_ENABLED
     extern void cam_console_init();

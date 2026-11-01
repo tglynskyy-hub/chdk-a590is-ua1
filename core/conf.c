@@ -1,3 +1,4 @@
+#include "ui_profile.h"
 #include "platform.h"
 #include "conf.h"
 #include "font.h"
@@ -792,7 +793,7 @@ typedef struct
     unsigned short size;
 } ConfInfoSave;
 
-void config_save(ConfInfo *ci, const char *filename, int config_base)
+static int config_save_checked(ConfInfo *ci, const char *filename, int config_base)
 {
 // if Lua native calls are forced on, don't save state to config file since user did not select it
 #if defined(OPT_FORCE_LUA_CALL_NATIVE)
@@ -820,6 +821,9 @@ void config_save(ConfInfo *ci, const char *filename, int config_base)
 
     char *buf = umalloc(size);
     char *p = buf;
+    int ok = 0;
+    // Do not truncate the existing file or dereference NULL on allocation failure.
+    if (!buf) goto finished;
 
     int fd = open(filename, O_WRONLY|O_CREAT|O_TRUNC, 0777); 
     if (fd >= 0)
@@ -852,19 +856,28 @@ void config_save(ConfInfo *ci, const char *filename, int config_base)
             }
         }
 
-        write(fd, buf, p-buf);
-        close(fd);
+        ok = write(fd, buf, p-buf) == p-buf;
+        if (close(fd) != 0) ok = 0;
     }
     ufree(buf);
+finished:
 
 // if Lua native calls are forced on, re-enable native calls
 #if defined(OPT_FORCE_LUA_CALL_NATIVE)
     conf.script_allow_lua_native_calls = 1;
 #endif
+    return ok;
+}
+
+// Keep the exported historical void API; internal callers retain dirty state on failure.
+void config_save(ConfInfo *ci, const char *filename, int config_base)
+{
+    config_save_checked(ci, filename, config_base);
 }
 
 void conf_save()
 {
+    unsigned profile_start = ui_profile_begin();
     int i;
     for (i=0; confinfo_handlers[i].ci != 0; i++)
     {
@@ -873,12 +886,13 @@ void conf_save()
             if (confinfo_handlers[i].start_id == CONF_USER)
         		user_menu_save();
 
-            config_save(confinfo_handlers[i].ci, confinfo_handlers[i].filename, confinfo_handlers[i].start_id);
-            config_update_last_saved(confinfo_handlers[i].ci);
+            if (config_save_checked(confinfo_handlers[i].ci, confinfo_handlers[i].filename, confinfo_handlers[i].start_id))
+                config_update_last_saved(confinfo_handlers[i].ci);
         }
     }
     // Save current script parameters if they have changed.
     save_params_values(0);
+    ui_profile_end(UI_PROF_SAVE, profile_start);
 }
 
 int save_config_file(int config_base, const char *filename)
@@ -888,7 +902,8 @@ int save_config_file(int config_base, const char *filename)
     {
         if ((config_base >= confinfo_handlers[i].start_id) && (config_base <= confinfo_handlers[i].end_id))
         {
-            config_save(confinfo_handlers[i].ci, (filename != 0) ? filename : confinfo_handlers[i].filename, confinfo_handlers[i].start_id);
+            if (!config_save_checked(confinfo_handlers[i].ci, (filename != 0) ? filename : confinfo_handlers[i].filename, confinfo_handlers[i].start_id))
+                return 0;
             if (filename == 0)  // Reset 'last_saved' values after saving default file
                 config_update_last_saved(confinfo_handlers[i].ci);
             return 1;

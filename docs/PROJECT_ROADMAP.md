@@ -1,3 +1,32 @@
+# Task004B — актуальний стан і наступні gates
+
+Основа: Task004 `92d7b142d14aeccc5fd10d187f577da17369182d`.
+Незлита історія: PR2 → PR3 → PR4 → PR5 → новий Task004B PR. Не merge автоматично;
+після merge/rebase попередника перевірити base/diff/CI, не скидати чужу історію.
+Task004 фізично працює за звітом користувача, UI повільний. Уточнення: не працював
+саме Benchmark; витік не встановлено. Task004B — development, hardware pending.
+
+Реалізовано: optional native profiler, comparable memory checkpoints і CSV,
+row-count reuse, no-op language/mode handling, config failure handling, host fault
+і equivalence tests, normal/diagnostic Full+Photography deterministic builds.
+Нова UX/RAW/algorithm архітектура нижче — план, не готові нові режими.
+
+| Task | Deliverable | Gate |
+|---|---|---|
+| 005 | Task-oriented UA UX на existing CMenu; короткі пояснення, Back, Classic | Physical navigation/legibility/input conflicts + latency, без placeholders |
+| 006 | DNG error paths/metadata/RAW workflows | Original samples, independent decoders, short-write/restore-buffer tests |
+| 007 | Bounded sensor exposure controller + adaptive HDR sequencing | ROI benchmark, no oscillation, highlight/SNR comparison, cancel |
+| 008 | Curated Lua sessions і direct menu launch | Frame/time/storage bounds, restore/failure tests, camera regressions |
+| 009 | Native hotspots, SD/ARM codegen optimization | Profiler evidence, GCC8.3.1 A/B, speed+RAM+correctness; no speculative assembly |
+| 010 | Stable release | Normal Full/Photography hardware matrix, stock/partition/rollback, comparative photos |
+
+Перший наступний крок — CSV за PERFORMANCE_PROFILE/MEMORY_INVESTIGATION, окремо
+Benchmark reproduction та stock UNLOCK data-partition test. Стабільність/якість
+важливіші за теоретичний speedup. Canon flash/bootloader незмінні, Lua збережено.
+
+---
+## Історичний план Task003 (контекст, не поточний статус)
+
 # CHDK A590 IS Enhanced — актуальна дорожня карта
 
 Цей документ уточнює A590IS_UA_PLAN.md і OPTIMIZATION_ROADMAP.md, не видаляючи

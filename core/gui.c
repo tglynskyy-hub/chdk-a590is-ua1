@@ -1,3 +1,4 @@
+#include "ui_profile.h"
 #include "platform.h"
 #include "touchscreen.h"
 #include "conf.h"
@@ -2918,6 +2919,7 @@ int gui_chdk_kbd_process()
 // Enter main menu or user menu based on configuration
 void gui_chdk_kbd_process_menu_btn()
 {
+    ui_profile_input();
     if (conf.user_menu_enable &&
         ((conf.user_menu_as_root && !camera_info.state.is_shutter_half_press) ||
          (!conf.user_menu_as_root && camera_info.state.is_shutter_half_press)))

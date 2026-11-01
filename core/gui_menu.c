@@ -1,3 +1,4 @@
+#include "ui_profile.h"
 #include "camera_info.h"
 #include "conf.h"
 #include "keyboard.h"
@@ -194,6 +195,7 @@ CMenu* get_curr_menu()
 
 //-------------------------------------------------------------------
 void gui_menu_init(CMenu *menu_ptr) {
+    unsigned profile_start = ui_profile_begin();
 
     gui_user_menu_flag = 0;
 
@@ -221,6 +223,7 @@ void gui_menu_init(CMenu *menu_ptr) {
     len_enum = rbf_str_width("WUBfS3a");
     len_space = rbf_char_width(' ');
     len_br = rbf_char_width('[') + rbf_char_width(']');
+    ui_profile_end(UI_PROF_INIT, profile_start);
     cl_rect = rbf_font_height() - 4;
     int_incr = 1;
 
@@ -465,7 +468,10 @@ static void select_proc()
 //   increment = -1 to move up, 1 to move down
 static void gui_menu_updown(int increment)
 {
+    unsigned profile_start = ui_profile_begin();
     int c, j;
+    // No callbacks mutate the menu during this movement.
+    int rows = gui_menu_rows();
 
     // Determine number of rows to move (1 or 4)
     if (camera_info.state.is_shutter_half_press || kbd_is_key_pressed(KEY_ZOOM_IN) || kbd_is_key_pressed(KEY_ZOOM_OUT)) c=4; else c=1;
@@ -479,10 +485,10 @@ static void gui_menu_updown(int increment)
 
             if (gui_menu_curr_item < 0)                                     // Off top, move to bottom
             {
-                gui_menu_curr_item = gui_menu_rows() - 1;
+                gui_menu_curr_item = rows - 1;
                 gui_menu_top_item = gui_menu_curr_item - num_lines + 1;
             }
-            else if (gui_menu_curr_item >= gui_menu_rows())                 // Off bottom, move to top
+            else if (gui_menu_curr_item >= rows)                 // Off bottom, move to top
             {
                 gui_menu_curr_item = gui_menu_top_item = 0;
             }
@@ -491,7 +497,7 @@ static void gui_menu_updown(int increment)
                 if (gui_menu_curr_item - gui_menu_top_item >= num_lines - 1)
                 {
                     gui_menu_top_item = gui_menu_curr_item - num_lines + 2;
-                    if (gui_menu_top_item + num_lines > gui_menu_rows()) gui_menu_top_item = gui_menu_rows() - num_lines;
+                    if (gui_menu_top_item + num_lines > rows) gui_menu_top_item = rows - num_lines;
                 }
             }
             else                                                            // Still in menu, and moving up, adjust scroll
@@ -513,6 +519,7 @@ static void gui_menu_updown(int increment)
         // Redraw menu if needed
         if (gui_menu_redraw == 0) gui_menu_redraw=1;
     }
+    ui_profile_end(UI_PROF_MOVE, profile_start);
 }
  
 // Handle left/right presses
@@ -589,7 +596,9 @@ static int gui_menu_touch_handler(int tx, int ty)
 // Process button presses when in GUI_MODE_MENU mode
 static int gui_menu_kbd_process() {
 
-    switch (kbd_get_autoclicked_key() | get_jogdial_direction())
+    int key = kbd_get_autoclicked_key() | get_jogdial_direction();
+    if (key) ui_profile_input();
+    switch (key)
     {
         case KEY_ERASE:
         case KEY_SHOOT_HALF:
@@ -961,6 +970,7 @@ static void gui_menu_draw(int enforce_redraw)
 
     if (gui_menu_redraw)
     {
+        unsigned profile_start = ui_profile_begin();
         if (gui_menu_redraw==2)
             gui_menu_draw_initial();
 
@@ -1070,6 +1080,8 @@ static void gui_menu_draw(int enforce_redraw)
             draw_rectangle((x+w)+2, y+1+i+j, (x+w)+6, y+h,    MAKE_COLOR(COLOR_BLACK, COLOR_BLACK), RECT_BORDER0|DRAW_FILLED|RECT_ROUND_CORNERS);
             draw_rectangle((x+w)+2, y+1+i,   (x+w)+6, y+i+j,  MAKE_COLOR(COLOR_WHITE, COLOR_WHITE), RECT_BORDER0|DRAW_FILLED|RECT_ROUND_CORNERS);
         }
+        ui_profile_end(UI_PROF_DRAW, profile_start);
+        ui_profile_present();
     }
 }
 

@@ -1,3 +1,45 @@
+# UX 2.0 — рішення Task004B для реалізації Task005
+
+**Статус: архітектура; Task004 Photography UI ще чинний.** Не показувати майбутні
+режими як кнопки, поки немає працюючої дії. Використати CMenu/gui_menu.c, existing
+dirty rows, CP1251 builtin font та conf.photography_ui_mode (ABI3.7), без GUI engine.
+
+360×240: 8×16 builtin cells; фактичну доступну ширину рахувати existing menu layout
+(іконка/відступ/value/scrollbar), не всі 45 колонок віддавати label. Короткі назви,
+контекст 1–2 рядки в existing message box при першому підтвердженні; екран на
+камері — acceptance, ASCII mockup не є доказом читабельності.
+
+| Домівка | Перший екран/дія | Advanced / залежність |
+|---|---|---|
+| Фотографувати | Return to Canon shooting, зведення активних overrides | Exposure settings, quick reset лише зі зрозумілим переліком |
+| RAW / DNG | Вимкнено / DNG+JPEG, пояснення місця/обробки | RAW settings і read-only metadata за RAW_DNG_ROADMAP |
+| Нічна зйомка | finite series preset, frame count, interval | Task008; не показувати до реалізації |
+| HDR / Експозиція | supported bracketing settings зараз; smart sequence пізніше | Task007/008; позначати offline merge |
+| Макро / Фокус | existing DOF/focus information, ручні поради | Авто stack прихований до focus_busy validation |
+| Автоматична зйомка | перевірені scripts як режими, parameters + Start | Task008 session registry; не довільний filename launcher |
+| Налаштування | мова, UI, Classic | Diagnostics тільки diagnostic/developer path |
+
+Сім категорій — semantic map, не сім великих плиток. Звичайний прокручуваний
+список, пам'ять позиції лише якщо це безпечно в existing menu; поширені RAW/Start
+за 1–2 переходи. Встановлені категорії без робочих дій не відображати.
+UP/DOWN вибір, SET відкрити/підтвердити, existing LEFT/Back і MENU з незмінною
+семантикою; shutter/ALT/Canon keys не перехоплювати новими global shortcuts.
+Повернення до Canon зберігає явні активні overrides, показувати їх перед стартом.
+
+Чотири рівні: simple knobs → named presets з summary → advanced actual parameters
+→ developer diagnostics. Preset показує зміни shutter/ISO/RAW/NR і спосіб restore;
+не приховувати storage/time/cancel. Помилка missing Lua/script — коротке повідомлення,
+повернення до попереднього меню; ніякої неактивної кнопки «незабаром».
+Classic завжди досяжний з Налаштувань, джерела upstream capabilities не видаляти.
+Persist лише реальні зміни; нові prefs append-only з migration/default tests.
+
+Task005 tests: 360×240 UA labels, long values, scrolling/text gaps, back from each
+submenu, PLAY/REC, half/full shutter, active script guard, language/mode persistence,
+missing resources, rapid key input, no-op writes, before/after p50/p95 and RAM.
+
+---
+## Історична архітектура (деталі контексту)
+
 # Фотографічний UI: проєкт архітектури
 
 > **Оновлення Task 004.** Task 004: Photography UI тепер реалізовано в `core/gui_photo.inc`,

@@ -11,7 +11,8 @@ make --version
 dpkg-query -W > baseline-output/packages.txt
 python3 tools/a590-baseline/test_locale.py
 python3 tools/a590-baseline/test_photo_ui.py
-command=(make PLATFORM=a590 PLATFORMSUB=101b DEF_SVN_REF=6346)
+python3 tools/a590-baseline/test_performance.py | tee baseline-output/performance-tests.txt
+command=(make PLATFORM=a590 PLATFORMSUB=101b DEF_SVN_REF=6346 "OPT_UI_PROFILE=${UI_PROFILE:-0}")
 printf 'Build command: %s\n' "${command[*]}"
 "${command[@]}" clean
 "${command[@]}" fir

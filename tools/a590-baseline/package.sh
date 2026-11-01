@@ -3,9 +3,11 @@ set -euo pipefail
 cd /src
 mkdir -p sd-package-output baseline-output bin
 exec > >(tee baseline-output/package.log) 2>&1
-stem=CHDK-A590IS-101B-1.7.0-r6346-enhanced
+flavor=normal
+if [[ "${UI_PROFILE:-0}" == 1 ]]; then flavor=diagnostic; fi
+stem=CHDK-A590IS-101B-1.7.0-r6346-task004b-$flavor
 source_commit=$(tr -d '\r\n' < baseline-output/source-commit.txt)
-command=(make PLATFORM=a590 PLATFORMSUB=101b DEF_SVN_REF=6346 "ZIPDATE=date -u -d @$SOURCE_DATE_EPOCH -R")
+command=(make PLATFORM=a590 PLATFORMSUB=101b DEF_SVN_REF=6346 "OPT_UI_PROFILE=${UI_PROFILE:-0}" "ZIPDATE=date -u -d @$SOURCE_DATE_EPOCH -R")
 for pass in 1 2; do
     "${command[@]}" firzipsubcomplete
     for profile in full photography; do

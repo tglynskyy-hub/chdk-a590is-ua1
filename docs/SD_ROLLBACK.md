@@ -1,3 +1,31 @@
+# Task004B — безпечний відкат і штатний Canon
+
+Task004B development normal/diagnostic позначені в назвах ZIP; не змішувати їх
+DISKBOOT і modules. Перед установкою зберегти всі фото, config, повне дерево SD
+та відомі Task004/Task002A пакети. Нічого не пишемо у Canon flash, bootloader
+assembly незмінний, фізична SD автоматично не змінюється.
+
+1. Вимкнути камеру, UNLOCK і ввімкнути без Firmware Update. Перевірити штатне
+   меню Canon, JPEG та відео, playback; на ПК перевірити читання нових файлів.
+2. На поточній dual-partition карті окремо перевірити видиму місткість і розділ,
+   куди Canon записав дані. UNLOCK не гарантує видимість великого FAT32 розділу.
+3. Якщо stock бачить лише малий FAT16 або запис не працює, використовувати окрему
+   резервну stock card з одним розділом, підтримуваним/відформатованим камерою.
+   FAT32 stock card не обіцяє A590 CHDK autoboot. Окрема <=2 GB FAT16 карта може
+   бути простішою для тестування CHDK+stock, але також перевірити фізично.
+4. Для відкату на Task002A повернути **весь** його перевірений комплект і його
+   backup config, а не один DISKBOOT. Зберегти новий config окремо, не переносити
+   ABI3.7 навмання до старої версії. Не відновлювати розмітку без image backup.
+5. LOCK → Task002A boot → JPEG/AF/zoom/video; UNLOCK → stock test знову.
+   Записати package SHA і результати, зберегти failed package/CSV для аналізу.
+
+Task002A source `398beedf0f50170fae2efd02884af11f7ea8e4fd`, PR3; відомі artifact
+ідентифікатори та checksums збережені у попередніх installation/evidence docs.
+Не виконувати format/partition commands як частину software build.
+
+---
+## Історична інструкція (не автоматичні дії)
+
 # Відкат A590 IS до попереднього CHDK
 
 > **Оновлення Task 004.** Для відкату Task 004 поверніть повний перевірений комплект Task 002A

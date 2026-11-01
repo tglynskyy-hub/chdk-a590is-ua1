@@ -1,3 +1,42 @@
+# Lua suite — контракт Task004B / реалізація Task008
+
+Нові scripts поки не реалізовані. Lua VM/API та існуючі scripts збережено.
+GUI registry має пов'язувати локалізований mode ID з перевіреним path, version,
+required modules/capabilities, параметрами й restore contract. Не запускати script
+автоматично при вході в меню; показати summary і явний Start.
+
+Спільна session state machine: validate → snapshot → prepare → capture/wait →
+finish/abort → restore → report. Кожна сесія має finite max_frames і max_duration,
+монотонний deadline, bounded retries, cancel через підтримуваний script input.
+Перевіряти battery/storage/capture mode і потрібні API до зміни settings.
+Оцінювати disk reserve = remaining frames × conservative JPEG+DNG size + margin;
+це estimate, перевіряти знову між кадрами. Немає безмежних while/retry loops.
+
+Snapshot лише змінюваних supported settings (Tv/Sv/Av overrides, RAW/DNG/NR,
+interval-related flags); restore після success/error/cancel. Під час script abort
+використати supported restore callback і не виконувати yield/sleep там, де VM
+цього не дозволяє. Hardware power loss не гарантує restore: наступний запуск
+показує активні overrides й пропонує явне скидання, не мовчазний camera reset.
+Release RAW hooks обов'язковий на всіх шляхах. Status: mode, frame N/max, час,
+remaining storage estimate, причина stop; log bounded, I/O поза RAW critical hook.
+
+| Script | Специфікація | Умови |
+|---|---|---|
+| Smart HDR | finite bracket offsets, actual exposure log, offline merge | Task007 ROI/controller validated |
+| Night Stacker | N light frames, NR choice, optional separate dark set | Time/storage/temperature drift, no in-camera merge claim |
+| Smart Timelapse | finite frames/deadline, interval overrun policy skip/warn | Bounded EV slope + hysteresis, no oscillation |
+| Astro Sequence | light/dark plan, long exposure deadline incl. write/NR | Safe cancel between supported operations |
+| Motion Trigger | finite trigger wait and frames, existing md API | Baseline false positives/latency before claiming improvement |
+| Macro Focus Stack | finite positions only after focus validation | Blocked: unresolved focus_busy, no unsafe address changes |
+
+Host tests: state-machine errors/cancel/timeouts, restoration idempotence, storage
+estimates. Camera: early cancel, SD full, missing module, PLAY/REC, long exposure,
+RAW errors, 5 repeated sessions with warm memory checkpoints. Lua for sequencing;
+native C only for measured expensive pixel statistics. No pixel-per-frame Lua loops.
+
+---
+## Історичні специфікації
+
 # Lua Photography Suite — специфікація, не реалізовані режими
 
 Lua зберігається в обох профілях. Шість нижчеописаних scripts ще не додані й
