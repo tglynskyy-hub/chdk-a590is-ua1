@@ -873,7 +873,14 @@
 #define LANG_PHOTO_ENUM_EV_STEP 741
 #define LANG_PHOTO_ENUM_SHORT_EXP 742
 #define LANG_PHOTO_ENUM_LONG_EXP 743
-#define GUI_LANG_ITEMS 743
+#define LANG_PHOTO_DIAGNOSTICS 744
+#define LANG_PHOTO_MEMORY_SAMPLE 745
+#define LANG_PHOTO_AFTER_LUA 746
+#define LANG_PHOTO_IDLE_SAMPLE 747
+#define LANG_PHOTO_EXPORT 748
+#define LANG_PHOTO_EXPORT_OK 749
+#define LANG_PHOTO_EXPORT_FAIL 750
+#define GUI_LANG_ITEMS 750
 
 //-------------------------------------------------------------------
 extern void gui_lang_init();

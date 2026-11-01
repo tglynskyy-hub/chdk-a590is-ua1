@@ -29,6 +29,7 @@ prefix = r'''
 #include <stdio.h>
 #include <string.h>
 #include "include/photo_ui_policy.h"
+#include "include/ui_profile.h"
 #include "core/gui_lang.h"
 #define CAM_HAS_IRIS_DIAPHRAGM 1
 #define CAM_SD_OVER_IN_MF 1
@@ -94,6 +95,9 @@ int main(void) {
     language_file=0;int e=errors;gui_photo_language(1);assert(errors==e+1 && !conf.lang_file[0]);
     marker=1;gui_photo_init_defaults(1);assert(conf.photography_ui_mode==1 && !conf.lang_file[0]);
     language_file=1;gui_photo_language(1);assert(conf.font_cp==FONT_CP_WIN_1251);
+    int unchanged_saves=saves, unchanged_lang=language_calls;
+    gui_photo_language(1);gui_photo_switch(conf.photography_ui_mode);
+    assert(saves==unchanged_saves && language_calls==unchanged_lang);
     assert(!gui_photo_module_available(0) && !gui_photo_module_available(""));
     assert(!gui_photo_module_available("calend.flt"));
     assert(gui_photo_module_available("lua.flt") && gui_photo_module_available("A/CHDK/MODULES/lua.flt"));

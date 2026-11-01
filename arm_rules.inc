@@ -64,6 +64,9 @@ endif
 CFLAGS+=-I$(include) -I$(include)/std -I$(core) -I$(modules) -I$(cam)
 CFLAGS+=-DVER_$(VER) -DHDK_VERSION=\"$(VER)\" -DBUILD_NUMBER=\"$(BUILD_NUMBER)\" -DBUILD_SVNREV=\"$(BUILD_SVNREV)\"
 CFLAGS+=-Wall -Wno-unused -Wno-format
+ifeq ($(OPT_UI_PROFILE),1)
+CFLAGS+=-DOPT_UI_PROFILE
+endif
 
 ifdef OPT_CURVES
 CFLAGS+=-DOPT_CURVES

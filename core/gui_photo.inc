@@ -15,8 +15,12 @@ static void gui_photo_switch(int mode)
     // No switching while script callbacks/RAW hooks own camera state.
     if (camera_info.state.state_kbd_script_run)
         return;
-    conf.photography_ui_mode = photo_ui_normalize(mode);
-    conf_save();
+    int next = photo_ui_normalize(mode);
+    if (next != conf.photography_ui_mode) {
+        conf.photography_ui_mode = next;
+        conf_save();
+        ui_profile_switch();
+    }
     gui_menu_init(gui_get_root_menu()); // resets navigation stack
     gui_set_need_restore();
 }
@@ -42,6 +46,11 @@ static void gui_photo_language(int ukrainian)
         gui_mbox_init(LANG_ERROR, LANG_PHOTO_FILE_MISSING, MBOX_BTN_OK|MBOX_TEXT_CENTER, 0);
         return;
     }
+    // Re-selecting the active built-in language needs no allocations or SD writes.
+    if (!conf.menu_rbf_file[0] &&
+        ((ukrainian && conf.font_cp == FONT_CP_WIN_1251 && !strcmp(conf.lang_file, "A/CHDK/LANG/ukrainian.lng")) ||
+         (!ukrainian && conf.font_cp == FONT_CP_WIN_1252 && !conf.lang_file[0])))
+        return;
     photo_set_language(ukrainian);
     conf_save();
     gui_menu_init(0); // retain current menu, recompute font metrics
@@ -155,7 +164,27 @@ static CMenuItem photo_smart_items[] = {
 };
 static CMenu photo_smart_menu = {0x27,LANG_PHOTO_SMART,photo_smart_items};
 
+#ifdef OPT_UI_PROFILE
+static void gui_photo_checkpoint(int arg) { ui_profile_memory(100 + arg); }
+static void gui_photo_export(int arg) {
+    (void)arg;
+    gui_mbox_init(LANG_PHOTO_DIAGNOSTICS,
+        ui_profile_export() ? LANG_PHOTO_EXPORT_OK : LANG_PHOTO_EXPORT_FAIL,
+        MBOX_BTN_OK|MBOX_TEXT_CENTER, 0);
+}
+static CMenuItem photo_diagnostic_items[] = {
+    MENU_ITEM(0,LANG_PHOTO_MEMORY_SAMPLE,MENUITEM_PROC,gui_photo_checkpoint,0),
+    MENU_ITEM(0,LANG_PHOTO_AFTER_LUA,MENUITEM_PROC,gui_photo_checkpoint,1),
+    MENU_ITEM(0,LANG_PHOTO_IDLE_SAMPLE,MENUITEM_PROC,gui_photo_checkpoint,2),
+    MENU_ITEM(0,LANG_PHOTO_EXPORT,MENUITEM_PROC,gui_photo_export,0),
+    MENU_ITEM(0x51,LANG_MENU_BACK,MENUITEM_UP,0,0), {0}
+};
+static CMenu photo_diagnostic_menu = {0,LANG_PHOTO_DIAGNOSTICS,photo_diagnostic_items};
+#endif
 static CMenuItem photo_settings_items[] = {
+#ifdef OPT_UI_PROFILE
+    MENU_ITEM(0,LANG_PHOTO_DIAGNOSTICS,MENUITEM_SUBMENU,&photo_diagnostic_menu,0),
+#endif
     MENU_ITEM(0x20,LANG_PHOTO_CLASSIC, MENUITEM_PROC, gui_photo_switch, PHOTO_UI_CLASSIC),
     MENU_ITEM(0x35,LANG_PHOTO_UKRAINIAN, MENUITEM_PROC, gui_photo_language, 1),
     MENU_ITEM(0x35,LANG_PHOTO_ENGLISH, MENUITEM_PROC, gui_photo_language, 0),

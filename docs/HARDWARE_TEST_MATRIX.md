@@ -1,3 +1,31 @@
+# Task004B — поточний hardware gate
+
+Task004 користувач підтвердив: startup, UA, Photography/Classic + persistence,
+keyboard, JPEG, AF/optical zoom, RAW/DNG, video, Lua, repeated reboot. UI суб'єктивно
+повільний. Уточнення «бенчмарк просто не працював» замінює нечітке «memory failed».
+Цифр і відтвореного витоку немає. Усі рядки Task004B нижче **PENDING**, CI не HW.
+
+| Перевірка | Очікування / що записати |
+|---|---|
+| LOCK CHDK boot, 5 restarts | exact package SHA, no mixed modules, normal Full і Photography |
+| UA, Classic↔Photo 30 switches | persisted choice, readable labels, no-op language, memory CSV |
+| UI first/warm open, 30 key presses | diagnostic CSV ×3, external video для physical latency |
+| Lua load/finish/ALT exit ×5 | native snapshots, no forced module unload |
+| Benchmark | screen/start/last stage/options/error/REC-PLAY; окремо SD off/on |
+| JPEG, AF, optical zoom | різні zoom positions, фокус до/після меню |
+| DNG+JPEG | original samples + hashes, tags/decode, repeated captures |
+| Video | record/playback до/після ALT, no dropped control responsiveness |
+| UNLOCK stock startup | без Firmware Update, немає CHDK, JPEG + video readable |
+| Stock dual partition | actual available capacity, destination partition, files readable на ПК |
+| Task002A rollback | matching DISKBOOT/modules/resources + saved config; boot/capture |
+
+Stock UNLOCK startup не доводить доступ до великого FAT32 data partition.
+Якщо видно тільки маленький FAT16, потрібна окрема stock card з однією підтримуваною
+Canon partition; подробиці SD_ROLLBACK. Не форматувати єдину копію фото.
+
+---
+## Історичні результати й попередні матриці
+
 # Матриця фізичних перевірок
 
 > **Оновлення Task 004.** Task 004 Enhanced: усі фізичні тести нового UI залишаються **не виконаними**.

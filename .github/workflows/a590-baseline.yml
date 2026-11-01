@@ -6,6 +6,12 @@ permissions:
   contents: read
 jobs:
   baseline:
+    strategy:
+      fail-fast: false
+      matrix:
+        instrumentation: [normal, diagnostic]
+    env:
+      UI_PROFILE: ${{ matrix.instrumentation == 'diagnostic' && '1' || '0' }}
     runs-on: ubuntu-22.04
     timeout-minutes: 30
     steps:
@@ -21,22 +27,22 @@ jobs:
           docker build --platform linux/amd64 -t a590-baseline tools/a590-baseline 2>&1 | tee baseline-output/container-build.log
           docker image inspect a590-baseline > baseline-output/container.json
       - name: Two clean builds and artifact verification
-        run: docker run --rm --platform linux/amd64 -v "$PWD:/src" a590-baseline bash tools/a590-baseline/build.sh
+        run: docker run --rm --platform linux/amd64 -e UI_PROFILE -v "$PWD:/src" a590-baseline bash tools/a590-baseline/build.sh
       - name: Two complete upstream distributions and strict SD package verification
-        run: docker run --rm --platform linux/amd64 -v "$PWD:/src" a590-baseline bash tools/a590-baseline/package.sh
+        run: docker run --rm --platform linux/amd64 -e UI_PROFILE -v "$PWD:/src" a590-baseline bash tools/a590-baseline/package.sh
       - name: Confirm firmware source stayed unchanged
         run: git diff --exit-code HEAD -- platform loader core modules lib
       - name: Publish verified full SD installation package
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          name: CHDK-A590IS-101B-1.7.0-r6346-enhanced-full
+          name: CHDK-A590IS-101B-1.7.0-r6346-task004b-${{ matrix.instrumentation }}-full
           path: sd-package-output/full/
           if-no-files-found: error
           compression-level: 0
       - name: Publish verified Photography SD installation package
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          name: CHDK-A590IS-101B-1.7.0-r6346-enhanced-photography
+          name: CHDK-A590IS-101B-1.7.0-r6346-task004b-${{ matrix.instrumentation }}-photography
           path: sd-package-output/photography/
           if-no-files-found: error
           compression-level: 0
@@ -44,6 +50,6 @@ jobs:
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          name: a590-101b-baseline
+          name: a590-101b-task004b-${{ matrix.instrumentation }}-evidence
           path: baseline-output/
           if-no-files-found: error

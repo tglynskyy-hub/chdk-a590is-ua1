@@ -8,7 +8,7 @@ import package
 import audit_modules
 
 root = Path(sys.argv[1])
-stem = 'CHDK-A590IS-101B-1.7.0-r6346-enhanced-'
+stem = 'CHDK-A590IS-101B-1.7.0-r6346-task004b-' + package.FLAVOR + '-'
 data = {}
 reports = {}
 for profile in ('full', 'photography'):
@@ -69,13 +69,15 @@ sections = dict(zip(('text', 'data', 'bss'), map(int, size_row[:3])))
 baseline_sections = {'text': 88148, 'data': 42212, 'bss': 14004}
 delta = {k: sections[k] - baseline_sections[k] for k in sections}
 # Review budgets, NOT a measurement of camera free RAM or a safety claim.
-for k, budget in {'text': 16384, 'data': 8192, 'bss': 256}.items():
+for k, budget in {'text': 16384, 'data': 8192, 'bss': (4096 if package.FLAVOR == 'diagnostic' else 256)}.items():
     package.require(delta[k] <= budget, 'Unreviewed section growth: ' + k)
 comparison = {
     'profiles': reports,
     'diskboot_identical': full['DISKBOOT.BIN'] == photo['DISKBOOT.BIN'],
     'diskboot_sha256': package.sha(photo['DISKBOOT.BIN']),
     'sections_each_profile': sections, 'section_delta': delta,
+    'task004_delta': {k: sections[k] - v for k,v in {'text':88852,'data':44332,'bss':14028}.items()},
+    'instrumentation': package.FLAVOR,
     'zip_bytes_saved': reports['full']['bytes'] - reports['photography']['bytes'],
     'payload_bytes_saved': sum(len(full[n]) for n in set(full) - set(photo)),
     'excluded_paths': sorted(set(full) - set(photo)), 'new_hardware_tests': False,

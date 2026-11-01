@@ -3,6 +3,7 @@
 import argparse
 import hashlib
 import json
+import os
 from pathlib import Path, PurePosixPath
 import tempfile
 import zipfile
@@ -10,8 +11,9 @@ from functools import lru_cache
 import audit_modules
 
 ROOT = Path(__file__).resolve().parents[2]
-NAME = 'CHDK-A590IS-101B-1.7.0-r6346-enhanced-full.zip'
-IDENTITY = {'platform': 'a590', 'firmware': '101b', 'chdk': '1.7.0', 'svn': 6346, 'variant': 'enhanced-task004', 'conf_abi': [3, 7]}
+FLAVOR = 'diagnostic' if os.environ.get('UI_PROFILE') == '1' else 'normal'
+NAME = 'CHDK-A590IS-101B-1.7.0-r6346-task004b-' + FLAVOR + '-full.zip'
+IDENTITY = {'platform': 'a590', 'firmware': '101b', 'chdk': '1.7.0', 'svn': 6346, 'variant': 'enhanced-task004b', 'build_mode': FLAVOR, 'conf_abi': [3, 7]}
 
 
 @lru_cache(maxsize=1)
@@ -159,6 +161,8 @@ def build(upstream, output, source_commit, profile='full'):
         'INSTALL/SD_ROLLBACK.md': 'docs/SD_ROLLBACK.md',
         'INSTALL/DISTRIBUTION_PROFILES.md': 'docs/DISTRIBUTION_PROFILES.md',
         'INSTALL/PHOTOGRAPHY_UI.md': 'docs/PHOTOGRAPHY_UI.md',
+        'INSTALL/PERFORMANCE_PROFILE.md': 'docs/PERFORMANCE_PROFILE.md',
+        'INSTALL/MEMORY_INVESTIGATION.md': 'docs/MEMORY_INVESTIGATION.md',
     }.items():
         files[target] = (ROOT / source).read_bytes()
     for name in excluded_paths(profile):

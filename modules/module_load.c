@@ -1,3 +1,4 @@
+#include "ui_profile.h"
 /*
 *   CHDK-FLAT Module System.  
 *
@@ -390,6 +391,7 @@ static void module_unload_idx(int idx)
 {
     if ((idx >= 0) && (modules[idx].hdr != 0))
     {
+        unsigned profile_start = ui_profile_begin();
         // Log unload
         module_log_unload(modules[idx].hMod->name);
 
@@ -403,6 +405,7 @@ static void module_unload_idx(int idx)
         // Free module memory, and mark module as inactive
         free(modules[idx].hdr);
         modules[idx].hdr = 0;
+        ui_profile_end(UI_PROF_MODULE_UNLOAD, profile_start);
     }
 }
 
@@ -660,7 +663,9 @@ static int _module_load(module_handler_t* hMod)
 int module_load(module_handler_t* hMod)
 {
     // Attempt to load module
+    unsigned profile_start = ui_profile_begin();
     _module_load(hMod);
+    ui_profile_end(UI_PROF_MODULE_LOAD, profile_start);
 
     // If load succeeded return success
     if (*hMod->lib && (*hMod->lib != hMod->default_lib))

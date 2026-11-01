@@ -883,3 +883,11 @@
 741 "Ev Step"
 742 "ShrtExp"
 743 "LongExp"
+
+744 "UI diagnostics"
+745 "Memory checkpoint"
+746 "After Lua unloaded"
+747 "Comparable idle"
+748 "Export diagnostics CSV"
+749 "Saved UISTAT / UIMEM / UIDELAY.CSV\nin CHDK/DATA."
+750 "Export failed. Check SD space."
